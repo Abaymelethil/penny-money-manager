@@ -1,5 +1,23 @@
 # Penny – Money Manager (Capacitor / Android)
 
+> A personal finance & money manager app for Android built with Capacitor.
+
+[![Download APK](https://img.shields.io/badge/Download-APK-brightgreen?logo=android&style=for-the-badge)](https://github.com/Abaymelethil/penny-money-manager/releases/latest/download/Penny-Money-Manager.apk)
+[![Latest Release](https://img.shields.io/github/v/release/Abaymelethil/penny-money-manager?style=for-the-badge)](https://github.com/Abaymelethil/penny-money-manager/releases/latest)
+
+## 📥 Download & Install APK
+
+Pre-built APK is readily available in GitHub Releases:
+
+👉 **[Download Penny-Money-Manager.apk](https://github.com/Abaymelethil/penny-money-manager/releases/latest/download/Penny-Money-Manager.apk)**
+
+### Installation on Android:
+1. Download the `.apk` file above on your Android phone.
+2. Tap the downloaded file to install.
+3. If prompted, allow **"Install unknown apps"** for your browser or file manager in Android settings.
+
+---
+
 Your `indexv11.html` packaged as a Capacitor Android project, with a new **Export to Excel** option.
 
 ## Build the app
