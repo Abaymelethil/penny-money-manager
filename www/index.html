@@ -1,0 +1,793 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#000000"><title>Penny – Money Manager</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{-webkit-text-size-adjust:100%;--ui:1;--W:min(100vw,440px);--disp:Outfit,system-ui,sans-serif;--bg:#131619;--cd:#1e2228;--c2:#191c1f;--tx:#f5f6f8;--mu:#9ca3af;--ln:#292d33;--bt:#2a2c30;--ex:#ff6b6b;--in:#4fd6a0;--ac:#8b9bff;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0rem);padding-bottom:env(safe-area-inset-bottom,0rem)}
+@media(prefers-color-scheme:light){:root{--bt:#e8ebf2;-webkit-text-size-adjust:100%;--bg:#f3f4f8;--cd:#fff;--c2:#e8ebf2;--tx:#14171f;--mu:#667085;--ln:#dde1ea;--ac:#4a5bd8;color-scheme:light}}
+html{font-size:calc(min(100vw,440px)/40*var(--ui))}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:1.6rem/1.35 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:12rem}
+.w{max-width:var(--W);margin:0 auto;padding:1.6rem}
+h1{font-size:2.6rem;font-weight:700;margin:0}h2{font-size:1.9rem;font-weight:700;margin:2.2rem 0 1rem}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}
+.cd{background:var(--cd);border:1px solid var(--ln);border-radius:2.6rem;padding:1.8rem}
+.top{display:flex;align-items:center;gap:1.2rem;justify-content:space-between}
+.av{width:4.6rem;height:4.6rem;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:700;font-size:2rem}
+.ib,.pill{background:var(--cd);border:1px solid var(--ln);border-radius:9.9rem;padding:0.9rem 1.4rem;font-weight:600;font-size:1.4rem}
+.ib{width:4.2rem;height:4.2rem;padding:0;display:grid;place-items:center;font-size:1.8rem}
+select.pill{appearance:none;padding-right:1.4rem}
+.sp{display:flex;justify-content:space-between;gap:1rem}.mu{color:var(--mu)}.sm{font-size:1.3rem}
+.lb{font-size:1.3rem;font-weight:700;letter-spacing:.02em}.ex{color:var(--ex)}.pos,.in{color:var(--in)}
+.amt{font-size:3rem;font-weight:700;margin-top:0.2rem;white-space:nowrap}
+.bx{background:var(--c2);border-radius:1.6rem;padding:1.4rem;display:flex;justify-content:space-between;align-items:center;margin-top:1.6rem;font-weight:700}
+.tr{display:flex;align-items:center;gap:1.2rem;padding:1rem 0;cursor:pointer}
+.tr i{width:4.6rem;height:4.6rem;border-radius:1.5rem;display:grid;place-items:center;font-style:normal;font-size:2.1rem;flex:none}
+.g{flex:1;min-width:0}.g b,.g small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.g small,.r small{color:var(--mu);font-size:1.3rem}.r{text-align:right}.r b{display:block}
+.seg{display:flex;background:var(--c2);border-radius:9.9rem;padding:0.4rem;gap:0.4rem;margin:1.2rem 0}
+.seg button{flex:1;padding:0.9rem 0.4rem;border-radius:9.9rem;font-weight:700;font-size:1.4rem;color:var(--mu)}.seg .on{background:var(--cd);color:var(--tx);box-shadow:0 0 0 1px var(--ln)}
+.nv{display:flex;align-items:center;justify-content:space-between;background:var(--cd);border:1px solid var(--ln);border-radius:9.9rem;padding:0.6rem;margin-bottom:1.4rem;text-align:center}
+.nv small{display:block;color:var(--mu);font-size:1.2rem}
+.day{display:flex;justify-content:space-between;font-weight:700;padding-top:0.8rem}
+input,select{width:100%;background:var(--c2);border:1px solid var(--ln);border-radius:1.4rem;padding:1.3rem;margin:0.6rem 0}
+input.big{font-size:3.4rem;font-weight:700;border:0;background:none;padding:0.6rem 0.2rem}
+.bn{position:fixed;left:0;right:0;bottom:0;background:var(--cd);border-top:1px solid var(--ln);border-radius:2.6rem 2.6rem 0 0;display:flex;justify-content:space-around;align-items:flex-end;padding:1rem 0.6rem calc(1rem + env(safe-area-inset-bottom,0rem));z-index:5}
+.bn button{flex:1;font-size:1.2rem;font-weight:700;color:var(--mu);display:grid;gap:0.2rem;justify-items:center}.bn button span{font-size:2.1rem}.bn .on{color:var(--tx)}
+.bn .fab{flex:none;width:5.8rem;height:5.8rem;border-radius:50%;background:var(--tx);color:var(--bg);font-size:3rem;margin-top:-3.4rem;display:grid;place-items:center;box-shadow:0 0.6rem 1.8rem #0006}
+.gr{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}.gr .cd{text-align:center;padding:2rem 0.8rem;font-weight:700;cursor:pointer}.gr i{display:grid;place-items:center;width:5.4rem;height:5.4rem;margin:0 auto 1rem;border-radius:1.7rem;font-style:normal;font-size:2.5rem}
+.ov{position:fixed;inset:0;background:#000a;z-index:9;display:flex;align-items:flex-end}
+.sh{background:var(--cd);width:100%;max-width:var(--W);margin:0 auto;border-radius:2.8rem 2.8rem 0 0;padding:1.8rem 1.8rem calc(1.8rem + env(safe-area-inset-bottom,0rem));max-height:92%;overflow:auto}
+.sh .sp{align-items:center;font-size:1.9rem;font-weight:700}
+.ch{display:flex;flex-wrap:wrap;gap:0.8rem;margin:0.8rem 0}.ch button{border:1px solid var(--ln);border-radius:9.9rem;padding:0.8rem 1.2rem;font-size:1.4rem;background:var(--c2)}.ch .on{border-color:var(--ac);background:var(--ac);color:#fff}
+.btn{width:100%;background:var(--tx);color:var(--bg);border-radius:9.9rem;padding:1.5rem;font-weight:700;margin-top:1.2rem}.btn.del{background:none;color:var(--ex);border:1px solid var(--ex)}
+label{font-size:1.3rem;color:var(--mu);display:block;margin-top:0.8rem}.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.dn{display:block;width:23rem;margin:0.6rem auto 1.4rem}.dt{fill:var(--tx);font:700 1.5rem Outfit,sans-serif}
+.em{text-align:center;color:var(--mu);padding:3.4rem 1rem}.err{color:var(--ex);font-size:1.4rem;min-height:1.8rem}
+textarea{width:100%;height:15rem;background:var(--c2);color:var(--tx);border:1px solid var(--ln);border-radius:1.4rem;padding:1rem;font:1.2rem monospace}
+.dot{width:1rem;height:1rem;border-radius:50%;display:inline-block;margin-right:0.6rem}
+.fr{display:flex;align-items:center;gap:1.6rem;padding:1.2rem 0.4rem;cursor:pointer}.fr small{color:var(--mu);font-size:1.4rem;display:block}.fr b{font-size:2.1rem;font-weight:600;display:block}.fi{width:3rem;display:grid;place-items:center;color:#4ab3f4;font-size:2.2rem;flex:none}
+.qa{display:flex;align-items:center;gap:1.4rem;background:#8b5cf61f;border:1px solid #8b5cf655;border-radius:2rem;padding:1.6rem;margin:1.4rem 0;cursor:pointer}.qa b{display:block;font-size:1.7rem}.qa small{color:var(--mu);font-size:1.5rem}
+.dr{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:1.8rem 0 1rem}.dr label{position:relative;display:flex;align-items:center;gap:1.2rem;margin:0;font-size:1.9rem;color:var(--tx);cursor:pointer}.dr input{position:absolute;inset:0;opacity:0;width:100%;margin:0;padding:0}
+.am{display:flex;align-items:center;gap:1.6rem;padding:0.8rem 0.4rem}.am input{background:none;border:0;font-size:3.4rem;padding:0;margin:0}
+.cb{width:5.4rem;height:5.4rem;border-radius:50%;background:var(--cd);display:grid;place-items:center;flex:none;color:var(--mu)}
+.oh{font-size:2.2rem;font-weight:700;color:var(--mu);margin:2.6rem 0 0.8rem}
+.nt{display:flex;align-items:center;gap:1.6rem;padding:1rem 0.4rem}.nt input{background:none;border:0;padding:0.8rem 0;margin:0;font-size:2rem}
+.tg{display:flex;gap:1rem;flex-wrap:wrap;margin:0.4rem 0 0.8rem 4.6rem}.tg button{display:flex;align-items:center;gap:0.8rem;background:var(--cd);border-radius:9.9rem;padding:1rem 1.6rem 1rem 1rem;font-size:1.9rem}.tg button:before{content:"";width:2.4rem;height:2.4rem;border-radius:50%;background:var(--bg)}
+.sv{position:fixed;right:2rem;bottom:calc(2.2rem + env(safe-area-inset-bottom,0rem));width:6.8rem;height:6.8rem;border-radius:50%;background:var(--tx);color:var(--bg);display:grid;place-items:center;z-index:6;box-shadow:0 0.6rem 1.8rem #0006}
+.sth{display:flex;align-items:center;gap:1rem}.sth b{flex:1;font-size:2.6rem;font-weight:700}.sth .ib{width:4.8rem;height:4.8rem}
+.pk{display:grid;grid-template-columns:repeat(4,1fr);gap:2.2rem 0.4rem;margin:2rem 0 1rem}.pk button{display:grid;justify-items:center;align-content:start;gap:0.8rem;font-size:1.5rem;line-height:1.2;text-align:center}.pk i{width:5.6rem;height:5.6rem;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:2.8rem}
+.rd{display:flex;align-items:center;gap:1.4rem;border:1px solid var(--ln);border-radius:9.9rem;padding:1.6rem 2rem;margin:1rem 0;width:100%;text-align:left;font-size:1.9rem}.rd s{width:2.2rem;height:2.2rem;border-radius:50%;border:0.2rem solid var(--ln);flex:none}.rd.on s{border:0.6rem solid var(--tx)}
+.sw{width:4.8rem;height:2.8rem;border-radius:9.9rem;background:var(--ln);position:relative}.sw:after{content:"";position:absolute;top:0.3rem;left:0.3rem;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--mu);transition:.15s}.sw.on:after{left:2.3rem;background:#fff}
+.gl{display:block;flex:none}
+.tr i,.gr i{color:var(--c)}
+.pk i{color:var(--c)}.pk i.sel{background:var(--c);color:#12202e;color:color-mix(in srgb,var(--c) 28%,#0b1220)}
+.ipk{gap:1rem 0.4rem;margin:0.8rem 0}.ipk i{width:4.8rem;height:4.8rem}.ipk button{padding:0}
+.rd .gi{color:var(--c);display:grid}
+.vi svg{vertical-align:-.28em;margin-right:0.8rem;display:inline-block}
+.bn button span{display:grid;place-items:center;height:2.6rem;font-size:0}
+.bn .fab{font-size:0}
+.pill svg{vertical-align:-.28em;margin-right:0.4rem}
+
+/* ===== sizes measured from the reference screenshots =====
+   1rem = 10dp of a 400dp-wide screen, scaled with the screen width, so the page matches the app on any phone */
+h1{font-size:2.4rem;font-weight:600}.top .ph{font-size:2rem}
+h2{font-size:2rem;font-weight:600}
+.w{padding:1.4rem}
+.top{gap:1.2rem}
+.av{width:4.6rem;height:4.6rem;font-size:2rem;font-weight:600}
+.ib{width:3.6rem;height:3.6rem}.ib .gl{width:2rem!important;height:2rem!important}.sb{width:3.3rem;height:3.3rem}
+.pill{height:2.87rem;padding:0 1.4rem;display:inline-flex;align-items:center;font-size:1.4rem;font-weight:600}
+select.pill{width:auto;margin:0;padding:0 1.4rem;line-height:1}
+.cd{border-radius:2.4rem;padding:1.8rem}
+.ls{padding:.4rem 1.55rem}
+.lb{font-size:1.4rem;font-weight:700;letter-spacing:.08em}
+.amt{font-size:3rem;font-weight:700;line-height:1.2;margin-top:.5rem}
+.bx{height:4.66rem;padding:0 1.15rem;border-radius:1.6rem;margin-top:2.1rem;font-size:1.8rem;font-weight:600}
+.bx .mu{font-size:1.4rem;font-weight:400}
+.rh{align-items:center;margin:2.3rem 0 1.2rem}.rh h2{margin:0}
+.tr{gap:1.5rem;padding:1.15rem 0}
+.tr i{width:4.45rem;height:4.45rem;border-radius:1.3rem;font-size:1.8rem}
+.g b,.r b{font-size:1.65rem;font-weight:600;line-height:1.25}
+.g small{font-size:1.3rem;line-height:1.25}.r small{font-size:1.2rem;line-height:1.25}
+.day{align-items:center;padding:.9rem 0 1.2rem;font-size:1.9rem;font-weight:600}.day span:last-child{font-size:1.8rem}
+.sq{height:4.76rem;border-radius:99px;padding:0 1.6rem;margin:0;font-size:1.6rem}
+.sf{width:9rem;height:4.07rem;border-radius:99px;padding:0 1.2rem;margin:0;font-size:1.4rem}
+.bn{max-width:var(--W);margin:0 auto;padding:.24rem .6rem calc(1rem + env(safe-area-inset-bottom,0px));border-radius:2.4rem 2.4rem 0 0}
+.bn button{padding-top:1.2rem;font-size:1.25rem;font-weight:500;gap:.2rem}
+.bn .fab{width:5.25rem;height:5.25rem;padding:0;margin:-3.5rem 0 2.1rem}.bn .fab .gl{width:2.4rem!important;height:2.4rem!important}
+
+/* ===== Accounts + More, matched to the reference ===== */
+h1{font-weight:700}
+.pill.lg{height:3.4rem;padding:0 1.6rem}.pill.lg svg{margin-right:.8rem}
+.ir{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:2.1rem 0 2.3rem;font-size:1.2rem;color:var(--mu);line-height:1.3}.ir b{font-weight:600}
+.sw{width:3.6rem;height:2rem;flex:none}.sw:after{top:.2rem;left:.2rem;width:1.6rem;height:1.6rem}.sw.on:after{left:1.8rem}
+.gr.sg{gap:1.5rem}.gr.sg .cd{text-align:left;padding:1.45rem 1.8rem;font-weight:400;cursor:default;border-radius:2.4rem}
+.sg .mu{font-size:1.3rem;color:var(--tx);opacity:.85}.sg .amt{font-size:2.4rem;margin-top:.6rem}
+h2.vi{margin:2.15rem 0 .85rem;font-size:2rem;display:flex;align-items:center;gap:1rem}.vi svg{margin:0}
+.cd.ar{display:flex;align-items:center;justify-content:space-between;height:5.66rem;padding:0 1.55rem;border-radius:99px;font-size:1.6rem;cursor:pointer}
+.ar .am2{display:flex;align-items:center;gap:.8rem}.ar .am2 b{font-weight:500;font-size:1.6rem}
+.pf{padding:1.35rem}.pr{display:flex;align-items:center;gap:1.2rem}
+.av.big{width:4.5rem;height:4.5rem;flex:none}.pn{background:none;border:0;padding:0;margin:0;font-size:2.4rem;font-weight:700;border-radius:0;line-height:1.2}.pr .mu{font-size:1.6rem}
+.pb{display:flex;align-items:center;justify-content:space-between;gap:1.2rem;border-top:1px solid var(--ln);margin-top:1.3rem;padding-top:1.3rem;font-size:1.3rem}.pb button{font-size:1.5rem;font-weight:600;white-space:nowrap}
+.tg2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem 1.15rem;margin-top:2.9rem}
+.tl{display:flex;align-items:center;gap:1rem;height:6.15rem;padding:0 1.7rem;background:var(--cd);border:1px solid var(--ln);border-radius:99px;font-size:1.65rem;cursor:pointer;white-space:nowrap}.ti{display:grid;flex:none}
+
+/* ===== v5: Home + Transactions measured from the 1200px-wide screenshots (1rem = 30px of the screenshot) ===== */
+h1,h2,.amt,.day,.pn{font-family:var(--disp)}
+.w{padding:1.6rem 1.33rem 1.33rem}
+.top{gap:1.17rem}
+h1{font-size:2.4rem;font-weight:700;line-height:1.2}
+h2{font-size:1.7rem;font-weight:600}
+.av{width:4.67rem;height:4.67rem;border:.27rem solid #2b2f35;background:#59658f;overflow:hidden;padding:0}.av svg{width:100%;height:100%;display:block}
+.av.big{width:4.5rem;height:4.5rem;border:0;font-size:2rem}
+.hb{display:flex;gap:.93rem}
+.ib{width:3.73rem;height:3.73rem;background:var(--bt);border:1px solid #373a40}
+.pill{background:var(--bt);border:1px solid #373a40;height:2.67rem;padding:0 1.03rem;font-size:1.15rem;font-weight:600}
+.cfc{margin-top:2.77rem;padding:1.8rem;border-radius:2.4rem;background:radial-gradient(110% 85% at 100% 0%,rgba(120,55,65,.30),transparent 62%),radial-gradient(90% 80% at 0% 100%,rgba(60,140,115,.20),transparent 66%),var(--cd)}
+.cfc>.sp:first-child{align-items:center}
+.cfc .pill{height:2.77rem;padding:0 3.3rem 0 1.27rem;background-color:rgba(255,255,255,.13);border-color:transparent;font-weight:500;appearance:none;background-repeat:no-repeat;background-position:right 1.2rem center;background-size:1.4rem;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5' fill='none' stroke='%23c9cbd1' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")}
+.cfl{letter-spacing:.12em}.cfl button{margin-left:.9rem;vertical-align:-.45rem}
+.lb{font-size:1.2rem;font-weight:600;letter-spacing:.02em}
+.cr{margin-top:1.3rem}
+.amt{font-size:3.4rem;font-weight:700;line-height:1.2;margin-top:.3rem}
+.bx{height:4.37rem;padding:0 1.2rem;border-radius:1.5rem;margin-top:2.07rem;font-size:1.55rem;font-weight:600;background:var(--c2)}
+.bx .mu{font-size:1.2rem;font-weight:400;text-decoration:underline dotted;text-underline-offset:.35rem}
+.rh{margin:2.3rem 0 1.2rem}.rh h2{margin:0}
+.ls{padding:.4rem 1.55rem}
+.tr{gap:1.53rem;padding:1.14rem 0}
+.tr i{width:4.47rem;height:4.47rem;border-radius:1.3rem}
+.g b,.r b{font-size:1.4rem;font-weight:600;line-height:1.25}
+.g small{font-size:1.05rem;line-height:1.25;margin-top:.1rem}
+.g small.as{display:flex;align-items:center;gap:.63rem}.as span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.as .gl{flex:none}
+.r small{font-size:1rem;line-height:1.25;margin-top:.43rem}
+.day{padding:1.13rem 0 1.23rem;font-size:1.8rem;font-weight:600}.day span:last-child{font-size:1.6rem}
+/* transactions header + search row */
+.hd{position:relative;margin:-1.6rem -1.33rem 0;padding:.97rem 1.4rem;background:var(--cd);border-bottom:.1rem solid var(--ln);gap:1.6rem}
+.hd .ph{font-size:1.7rem;font-weight:600}
+.ib.sb{width:3.33rem;height:3.33rem}.hd .sb{background:#2c3036}
+.sr{display:flex;align-items:center;gap:.8rem;margin-top:1rem}
+.sbx{position:relative;flex:1}.sbx svg{position:absolute;left:1.4rem;top:50%;transform:translateY(-50%);color:#c7cbd1}
+.sq{width:100%;height:4.77rem;border-radius:99px;padding:0 1.5rem 0 4.23rem;margin:0;font-size:1.47rem;background:var(--cd)}
+.ib.sb2{position:relative;width:4.1rem;height:4.1rem;flex:none}
+.ib.sb2 .sf{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;padding:0;border:0;font-size:1.6rem}
+#list{margin-top:1.07rem}
+.fab2{position:fixed;right:max(1.5rem,calc((100vw - var(--W))/2 + 1.5rem));bottom:calc(1.6rem + env(safe-area-inset-bottom,0px));width:5.2rem;height:5.2rem;border-radius:50%;background:var(--tx);color:var(--bg);display:grid;place-items:center;z-index:5;box-shadow:0 .6rem 1.8rem #0006}.fab2 .gl{width:2.2rem!important;height:2.2rem!important}
+/* bottom bar */
+.bn{padding:0 .6rem calc(.8rem + env(safe-area-inset-bottom,0px))}
+.bn button{padding-top:1.25rem;font-size:1.05rem;font-weight:500;gap:.58rem;line-height:1.2;color:#5f636b}.bn .on{color:var(--tx);font-weight:600}
+.bn button span{height:2rem}.bn button span .gl{width:2rem!important;height:2rem!important}
+.bn .fab{width:5.2rem;height:5.2rem;margin:-2.5rem 0 1.8rem}.bn .fab .gl{width:2.2rem!important;height:2.2rem!important}
+
+
+/* ===== v8: category picker, matched to the reference ===== */
+.sh{border-radius:2.4rem 2.4rem 0 0;border-top:.1rem solid var(--ln);padding:1.77rem 1.7rem calc(3rem + env(safe-area-inset-bottom,0rem))}
+.sth{gap:.67rem}
+.sth b{font-family:var(--disp);font-size:2.1rem;font-weight:600;line-height:1.2}
+.sth .ib{width:3.4rem;height:3.4rem;background:#34363c;border:0}
+.sth .ib .gl{width:2rem!important;height:2rem!important}
+.seg.vt{flex:none;margin:0 .66rem 0 0;padding:.42rem;gap:0;background:#0f1113;border-radius:99px}
+.seg.vt button{flex:none;width:2.97rem;height:2.57rem;padding:0;border-radius:99px;display:grid;place-items:center;color:#8d9299;box-shadow:none}
+.seg.vt .on{background:#2b3036;color:#fff;box-shadow:none}
+.pk{grid-template-columns:repeat(4,1fr);grid-auto-rows:9.09rem;gap:0;margin:2.6rem -.77rem 0}
+.pk button{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.43rem;padding:0 .2rem;font-size:1.1rem;line-height:1.27;font-weight:400;color:var(--tx)}
+.pk i{width:3.73rem;height:3.73rem;flex:none}
+.pk i.sel{background:var(--c);color:var(--cd)}
+
+/* ===== v11 fixes ===== */
+.ib.sb2{margin:0}
+.toast{position:fixed;left:50%;bottom:calc(11rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(var(--W) - 3rem);background:var(--tx);color:var(--bg);border-radius:99px;padding:1.1rem 2rem;font-size:1.4rem;font-weight:600;z-index:20;text-align:center;box-shadow:0 .6rem 1.8rem #0006}
+.tg2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tl{padding:0 1.4rem;gap:.9rem;font-size:1.5rem;min-width:0}
+.ir{font-size:1.08rem}
+
+/* ===== v12: Add-transaction screen sized to match the reference app ===== */
+.adx .hd.ad{margin:calc(-1.6rem - env(safe-area-inset-top,0px)) -1.33rem 0;padding:calc(.92rem + env(safe-area-inset-top,0px)) 1.5rem .92rem;gap:1.57rem;justify-content:flex-start;background:none;border-bottom:0;position:relative;z-index:1}
+.adx .hd.ad::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--cd);border-bottom:.1rem solid #25292f}
+html,body{overflow-x:clip}
+.adx .hd .ib.sb{width:3.33rem;height:3.33rem;background:#34383d;border-color:#3e4247}
+.adx .hd .ph{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:1.51rem;font-weight:600}
+.adx .qa{gap:.9rem;padding:.87rem 1.5rem;margin:1.13rem 0 0}
+.adx .qa .g b{font-family:var(--disp);font-size:1.44rem;font-weight:600}
+.adx .qa .g small{font-size:1.16rem;margin-top:.3rem}
+.adx .seg{background:#0f1113;padding:.42rem;gap:0;margin:1.77rem 0 0}
+.adx .seg button{height:3rem;padding:0;display:grid;place-items:center;font-size:1.09rem;font-weight:700;color:#878889;background:none;box-shadow:none}
+.adx .seg .on{background:#2b3036;color:#fff;box-shadow:none}
+.adx .dr{gap:1.27rem;margin:3.23rem 0 2.1rem}
+.adx .dr label{font-size:1.3rem;gap:1.4rem}
+.adx .fi{color:#a8bdc8}
+.adx .fi svg{fill:#a8bdc8!important}
+.adx .fi.rp{font-size:1.9rem;font-weight:500}
+.adx .fr[data-a="pacc"] .fi svg,.adx .fr[data-a="pto"] .fi svg{width:2.05rem!important;height:2.05rem!important}
+.adx .fr[data-a="att"] .fi svg{transform:rotate(90deg)}
+.adx .nt>button svg{width:1.9rem!important;height:1.9rem!important}
+.adx .nt>button{margin-right:-.55rem}
+.adx .am{gap:1.4rem;padding:.4rem 0 .73rem}
+.adx .am input{font-size:2rem;font-weight:400}
+.adx .am small{font-size:1.25rem}
+.adx .cb{width:3.33rem;height:3.33rem;background:#303335}
+.adx .cb svg{width:1.8rem!important;height:1.8rem!important}
+.adx .fr{gap:1.4rem;padding:1.06rem 0}
+.adx .fr small{font-size:1.25rem;margin-bottom:.25rem}
+.adx .fr .g b{font-size:1.41rem;font-weight:400!important}
+.adx .oh{font-family:var(--disp);font-size:1.39rem;font-weight:600;margin:.87rem 0 .47rem}
+.adx .nt{gap:1.4rem;padding:1.84rem 0}
+.adx .nt input{font-size:1.29rem;padding:0}
+.adx input::placeholder{color:#53555b;opacity:1}
+.adx .tg{margin:-.9rem 0 1.3rem 3.63rem;gap:.9rem}
+.adx .tg button{font-size:1.25rem;background:#1b1f24;padding:.6rem 1.1rem .6rem .6rem}
+.adx .tg button:before{width:1.5rem;height:1.5rem}
+.adx .sv{width:5.2rem;height:5.2rem;right:1.5rem;bottom:calc(1.6rem + env(safe-area-inset-bottom,0px))}
+
+/* ===== v12: Home cash-flow card sizes ===== */
+.cfc .amt{font-size:2.72rem}
+.cfc .bx{font-size:1.47rem}
+.cfc .cfl{letter-spacing:.2em}
+.cfc .pill{font-size:1.3rem}
+
+/* ===== v12: no focus ring on fields, just the blinking cursor ===== */
+*:focus,*:focus-visible,input:focus,textarea:focus,select:focus,button:focus{outline:none!important;box-shadow:none!important;-webkit-tap-highlight-color:transparent}
+input,textarea{caret-color:var(--tx)}
+input:focus,textarea:focus,select:focus{border-color:var(--ln)}
+.adx input:focus,.nt input:focus,.am input:focus{border-color:transparent}
+
+/* ===== v12: every header bar is full-width and runs up under the status bar ===== */
+.hd{margin-top:calc(-1.6rem - env(safe-area-inset-top,0px));padding-top:calc(.97rem + env(safe-area-inset-top,0px));background:none;border-bottom:0;position:relative;z-index:1}
+.hd::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--cd);border-bottom:.1rem solid #25292f}
+/* ===== caret: always visible, nudged right so it isn't clipped at the field edge ===== */
+input:not([type=file]):not([type=checkbox]):not([type=radio]):not([type=date]),textarea{caret-color:#fff!important;text-indent:.5rem}
+/* ===== UI pass ===== */
+.adx .am input{font-size:3.6rem;font-weight:600;line-height:1.15}
+.adx .fi.rp{font-size:2.8rem}
+.adx .am small{font-size:1.25rem}
+.adx .qa{padding:.55rem 1.2rem;margin:.7rem 0 0;border-radius:99px;gap:.8rem}
+.adx .qa .g{display:flex;align-items:center;gap:.8rem}
+.adx .qa .g small{display:none}
+.adx .qa .g b{font-size:1.3rem}
+.chp{display:flex;gap:.8rem;overflow-x:auto;margin:.2rem 0 .6rem;padding:.2rem 0 .6rem;scrollbar-width:none}
+.chp::-webkit-scrollbar{display:none}
+.chp button{flex:none;display:flex;align-items:center;gap:.6rem;border-radius:99px;background:#252a31;padding:.7rem 1.3rem .7rem .8rem;font-size:1.25rem;font-weight:500;color:var(--tx)}
+.chp button.on{background:var(--ac);color:#fff}
+button.ib,button.cb,button.pill{position:relative}
+button.ib::after,button.cb::after,button.pill::after{content:"";position:absolute;inset:-.6rem}
+:root{--mu:#b4bcc8}
+@media(prefers-color-scheme:light){:root{--mu:#667085}}
+.adx input::placeholder{color:#7d838c}
+@keyframes shUp{from{transform:translateY(100%)}to{transform:none}}
+.sh{animation:shUp .22s ease-out}
+.tr{transition:background .12s}
+@media(prefers-reduced-motion:reduce){.sh{animation:none}}
+
+/* ===== Typography matched 1:1 to the reference: Outfit for headings, Inter for everything else =====
+   sizes solved from glyph widths measured in the reference screenshot (1rem = 30px there) */
+:root{--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--disp:Outfit,system-ui,sans-serif;--mu:#9ca3af}
+@media(prefers-color-scheme:light){:root{--mu:#667085}}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-synthesis:none}
+body,button,input,select,textarea{font-family:var(--body)}
+h1,h2,.day,.pn,.ph,.sth b,.adx .qa .g b,.oh{font-family:var(--disp)}
+h1{font-size:2.4rem;font-weight:600;letter-spacing:0;line-height:1.2}
+h2{font-size:1.9rem;font-weight:600;letter-spacing:0}
+.amt{font-family:var(--body);font-weight:700;letter-spacing:0;font-variant-numeric:lining-nums}
+.cfc .amt{font-size:3rem;line-height:1.2;margin-top:.2rem}
+.lb{font-size:1.33rem;font-weight:600;letter-spacing:.02em}
+.lb.ex{color:#e56b6f}.lb.in{color:#84d1b0}
+.cfc .cfl{font-size:1.43rem;font-weight:600;letter-spacing:.08em;color:#9ca3af}
+.cfc .pill{font-size:1.2rem;font-weight:500;color:#eeeded}
+.cfc .bx{font-size:1.64rem;font-weight:600}
+.cfc .bx .mu{font-size:1.4rem;font-weight:400}
+.g b,.r b{font-size:1.62rem;font-weight:600;line-height:1.25}
+.r b{font-size:1.6rem}
+.g small,.g small.as{font-size:1.16rem;font-weight:400}
+.r small{font-size:1.05rem;font-weight:400}
+.rh .pill{font-size:1.3rem;font-weight:600;color:var(--tx)}
+.bn button{font-size:1.15rem;font-weight:500}.bn .on{font-weight:600}
+.day{font-size:1.9rem}.day span:last-child{font-family:var(--body);font-size:1.6rem}
+
+/* ===== Motion system ===== */
+:root{--ease:cubic-bezier(.22,1,.36,1);--spring:cubic-bezier(.34,1.56,.64,1);--soft:cubic-bezier(.4,0,.2,1)}
+html{scroll-behavior:smooth}
+body{transition:background-color .4s var(--soft)}
+button,.tr,.tl,.cd[data-a],.qa,.fr,.rd,.chp button,.pk button,.ch button{transition:transform .35s var(--ease),background-color .25s var(--soft),opacity .25s var(--soft),color .25s var(--soft),border-color .25s var(--soft),box-shadow .3s var(--soft);-webkit-user-select:none;user-select:none}
+button:active,.tl:active,.cd[data-a]:active,.qa:active,.pk button:active,.rd:active{transform:scale(.95);transition-duration:.08s}
+.tr:active{transform:scale(.985);background:#ffffff0d;transition-duration:.08s}
+.fr:active{opacity:.6;transition-duration:.08s}
+.bn .fab,.fab2,.sv{transition:transform .45s var(--spring),box-shadow .3s var(--soft)}
+.bn .fab:active,.fab2:active,.sv:active{transform:scale(.9) rotate(90deg);transition-duration:.1s}
+input,textarea,select{transition:border-color .25s var(--soft),background-color .25s var(--soft)}
+.seg button,.seg .on{transition:background-color .35s var(--ease),color .3s var(--soft),box-shadow .35s var(--ease)}
+.sw{transition:background-color .35s var(--ease)}
+.sw:after{transition:left .4s var(--spring),background-color .3s var(--soft),width .25s var(--ease)}
+.sw.on{background:var(--in)}
+.sw:active:after{width:2rem}
+.sw.on:active:after{left:1.6rem}
+
+/* bottom bar: icons lift and tint smoothly (nav is patched in place, never rebuilt) */
+.bn button{transition:color .35s var(--soft),transform .35s var(--ease)}
+.bn button span{transition:transform .5s var(--spring)}
+.bn button.on span{transform:translateY(-.25rem) scale(1.12)}
+.bn button:not(.fab):active span{transform:scale(.85)}
+.bn{animation:navIn .4s var(--ease) both}
+@keyframes navIn{from{transform:translateY(100%)}to{transform:none}}
+.fab2{animation:popIn .4s var(--spring) both}
+@keyframes popIn{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+
+/* screen entrance: children rise and fade in with a stagger (opacity-only on the add form so fixed buttons stay put) */
+@keyframes rise{from{opacity:0;transform:translate3d(0,1.6rem,0) scale(.985)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes rowIn{from{opacity:0;transform:translate3d(0,.9rem,0)}to{opacity:1;transform:none}}
+#app.enter>*:not(.adx){animation:rise .42s var(--ease) both;animation-delay:calc(var(--i,0)*28ms)}
+#app.enter>.adx{animation:fade .35s var(--soft) both}
+#app.enter .adx>*{animation:rowIn .4s var(--ease) both;animation-delay:calc(var(--j,0)*18ms)}
+#app.enter .ls .tr,#app.enter .gr>*,#app.enter .cd.ar{animation:rowIn .42s var(--ease) both;animation-delay:calc(70ms + var(--k,0)*28ms)}
+#list .tr.new{animation:rowIn .45s var(--ease) both;animation-delay:calc(var(--k,0)*22ms)}
+.cfc{background-size:140% 140%,140% 140%,auto;animation-name:none}
+#app.enter .cfc::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(105deg,transparent 35%,#ffffff12 50%,transparent 65%);transform:translateX(-120%);animation:sheen 1s var(--ease) .15s both}
+.cfc{position:relative;overflow:hidden}
+@keyframes sheen{to{transform:translateX(120%)}}
+
+/* sheets and dialogs */
+.ov{animation:ovIn .35s var(--soft) both;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+@keyframes ovIn{from{background:#0000;backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0)}}
+.sh{animation:shUp .5s var(--ease) both;will-change:transform}
+@keyframes shUp{from{transform:translateY(100%)}to{transform:none}}
+.ov.out{animation:ovOut .26s var(--soft) both;pointer-events:none}
+.ov.out .sh{animation:shDown .26s cubic-bezier(.4,0,1,1) both}
+@keyframes ovOut{to{background:#0000;backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0)}}
+@keyframes shDown{to{transform:translateY(100%)}}
+.sh>*{animation:fade .5s var(--soft) .12s both}
+.toast{animation:toastIn .5s var(--spring) both}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,2rem) scale(.9)}to{opacity:1;transform:translate(-50%,0)}}
+.toast.out{animation:toastOut .25s var(--soft) both}
+@keyframes toastOut{to{opacity:0;transform:translate(-50%,1rem) scale(.95)}}
+.err:not(:empty){animation:shake .45s var(--ease)}
+@keyframes shake{20%{transform:translateX(-.5rem)}40%{transform:translateX(.5rem)}60%{transform:translateX(-.3rem)}80%{transform:translateX(.3rem)}}
+.amt.cu{transition:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* ===== Pitch-black (OLED) dark theme ===== */
+@media(prefers-color-scheme:dark){
+:root{--bg:#000;--cd:#0c0d0f;--c2:#000;--ln:#1b1d21;--bt:#17191c}
+html,body{background:#000}
+.cd,.nv,.tl,.rd{border-color:#1b1d21}
+.cfc{background:radial-gradient(110% 85% at 100% 0%,rgba(120,55,65,.26),transparent 62%),radial-gradient(90% 80% at 0% 100%,rgba(60,140,115,.17),transparent 66%),#0c0d0f}
+.bx{background:#000;box-shadow:inset 0 0 0 1px #15171a}
+.hd::before,.adx .hd.ad::before{background:#000;border-bottom:.1rem solid #15171a}
+.ib,.pill{background:#17191c;border-color:#24272b}
+.hd .sb,.adx .hd .ib.sb,.sth .ib{background:#1a1c20;border-color:#24272b}
+.cfc .pill{background-color:rgba(255,255,255,.1)}
+.seg,.seg.vt,.adx .seg{background:#0a0b0d;box-shadow:inset 0 0 0 1px #17191c}
+.seg .on,.seg.vt .on,.adx .seg .on{background:#1d2024;color:#fff}
+.bn{background:#050607;border-top:1px solid #15171a}
+.bn button{color:#5b5e65}.bn .on{color:#fff}
+.sh{background:#0a0b0d;border-top:1px solid #1b1d21}
+.ov{background:#000c}
+.chp button,.adx .tg button,.tg button{background:#14161a}
+.cb,.adx .cb{background:#17191c}
+.adx .qa{background:#8b5cf61a}
+.sq{background:#0c0d0f}
+.tr:active{background:#ffffff0a}
+input,select,textarea{background:#0c0d0f}
+.toast{box-shadow:0 .6rem 2.4rem #000}
+.bn .fab,.fab2,.sv{box-shadow:0 .6rem 2.4rem rgba(255,255,255,.08)}
+}
+
+/* ===== Proportion pass: calmer, more balanced sizes on every screen except Home (Home stays matched to the reference) ===== */
+body[data-v]:not([data-v=home]):not([data-v=add]) h1{font-size:2rem}
+body[data-v]:not([data-v=home]):not([data-v=add]):not([data-v=tx]) h2{font-size:1.6rem}
+body[data-v] h2.vi{font-size:1.6rem}
+body[data-v] .top .pill,body[data-v] .pill.lg{font-size:1.1rem}
+body[data-v] .ir,body[data-v] .ir b{font-size:1rem}
+body[data-v] .cd>.mu{font-size:1.1rem}
+body[data-v=accounts] .cd .amt{font-size:2rem}
+body[data-v=accounts] .cd.ar span,body[data-v=accounts] .ar .am2 b{font-size:1.35rem}
+body[data-v] .tl{font-size:1.3rem}
+body[data-v] .pn{font-size:2rem}
+.pr{align-items:center}
+body[data-v] .pb .mu,body[data-v] .pb{font-size:1.15rem}
+body[data-v] .pb button{font-size:1.3rem}
+body[data-v] label{font-size:1.15rem}
+body[data-v] .sm{font-size:1.15rem}
+body[data-v] .sp b,body[data-v] .sp span{font-size:1.35rem}
+body[data-v] .sp .pill{font-size:1.05rem}
+body[data-v=analysis] .seg button{font-size:1.2rem}
+body[data-v=analysis] .amt{font-size:2.6rem}
+body[data-v=analysis] .w>.cd:first-of-type b,body[data-v=analysis] .nv b{font-size:1.35rem}
+body[data-v=analysis] .nv small{font-size:1.05rem}
+body[data-v=analysis] .bx span:last-child{font-size:1.35rem}
+body[data-v] .sh .sp b{font-size:1.5rem}
+body[data-v] .ch button{font-size:1.2rem}
+
+/* amount entry: calmer size */
+body[data-v=add] .adx .am input{font-size:2.5rem;font-weight:600;line-height:1.2;letter-spacing:0}
+body[data-v=add] .adx .fi.rp{font-size:1.9rem}
+body[data-v=add] .adx .am small{font-size:1.1rem}
+
+/* in-app calculator */
+.cx{text-align:right;padding:.6rem .6rem 1.4rem;overflow:hidden}
+.cx #ce{font-size:1.4rem;min-height:1.9rem}
+.cx #cr{font-family:var(--body);font-size:3.4rem;font-weight:600;line-height:1.2;word-break:break-all}
+.kp{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}
+.kp .k{height:5.6rem;border-radius:2.2rem;background:#17191c;color:var(--tx);font-size:2rem;font-weight:500}
+.kp .k.op{color:#a5b4fc;font-size:2.2rem}.kp .k.fn{color:#9ca3af}
+.kp .k.eq{background:#26292f}
+.kp .k.use{background:var(--tx);color:var(--bg);font-size:1.5rem;font-weight:700}
+.kp .k.wide{grid-column:span 2}
+.kp .k:active{background:#2a2d33}.kp .k.use:active{background:#cfd2d8}
+</style></head><body><div class="w" id="app"></div><div id="nav"></div><div id="ov"></div><input type="file" id="bf" accept=".json,application/json" hidden><input type="file" id="xf" accept=".xlsx,.xls,.csv" hidden>
+<script>
+const K='penny.v1',PAL=['#8b9bff','#ff9f43','#4fd6a0','#ff6b6b','#c084fc','#38bdf8','#fbbf24','#f472b6','#a3e635','#2dd4bf','#fb7185','#94a3b8'];
+const EX=[['Others','others'],['Groceries','groceries'],['Food and Beverage','food'],['Bills and Utilities','bills'],['Shopping','shopping'],['Travelling','travel'],['Entertainment','fun'],['Medical','medical'],['Personal Care','care'],['Education','edu'],['Gifts and Donation','gift'],['Hobby','hobby'],['Loan','loan'],['Investments','invest']];
+const IN=[['Others','others'],['Achan','people'],['Amma','family'],['Some Kinda Sale','sale'],['Cashback/Gifts','cashback'],['Loan Payback','payback']];
+const G={"others":"M19.24,9.73L18.37,10.02L17.63,10.66L17.24,11.39L17.20,12.51L17.39,13.15L18.17,14.02L18.66,14.32L19.78,14.41L20.41,14.27L21.34,13.49L21.68,12.90L21.83,11.93L21.59,11.00L20.90,10.22L19.98,9.78ZM11.78,9.73L10.80,10.07L9.98,10.90L9.68,11.59L9.68,12.61L10.02,13.34L10.56,13.93L11.20,14.32L12.32,14.41L12.95,14.27L13.39,13.98L14.02,13.29L14.32,12.66L14.32,11.54L13.98,10.80L13.29,10.12L12.46,9.78ZM4.27,9.73L3.34,10.02L2.61,10.71L2.22,11.59L2.17,12.37L2.46,13.24L3.20,14.02L3.68,14.32L4.80,14.41L5.44,14.27L6.41,13.44L6.71,12.95L6.80,11.68L6.61,11.05L5.98,10.27L4.95,9.78Z","groceries":"M5.00,12.71L5.00,21.88L19.88,21.88L19.93,13.10L19.78,12.66ZM14.51,6.85L13.73,7.05L13.00,7.63L12.61,8.22L12.46,9.44L12.71,10.22L13.54,11.10L14.22,11.39L15.20,11.39L16.02,11.00L16.61,10.41L16.95,9.68L16.95,8.61L16.61,7.88L15.78,7.10ZM6.46,2.71L5.93,3.24L5.59,3.88L5.49,5.10L4.61,5.59L4.17,6.02L3.83,6.66L3.78,7.78L3.88,8.17L4.41,8.95L4.95,9.44L4.61,10.41L4.66,11.29L4.85,11.44L8.66,11.39L8.71,11.24L6.90,10.02L6.90,9.78L7.39,9.05L8.17,9.29L8.17,8.95L6.37,7.78L6.51,7.24L6.90,6.76L7.63,7.00L7.49,5.93L7.93,5.63L8.56,5.59L8.76,5.83L8.80,6.46L8.95,6.71L9.59,6.12L10.27,6.51L10.46,6.76L9.39,8.56L9.44,9.00L9.59,9.00L10.07,8.41L10.32,8.46L10.90,8.90L10.80,9.44L9.98,10.71L9.93,11.20L10.02,11.39L11.88,11.39L11.93,11.20L11.54,10.66L11.24,9.83L11.15,8.85L11.44,7.78L11.73,7.24L12.76,6.17L12.80,5.88L12.51,5.15L12.12,4.66L11.39,4.17L10.07,4.07L9.54,3.15L9.00,2.66L8.51,2.41L7.49,2.32ZM15.59,2.51L15.05,3.05L15.05,3.20L16.46,4.76L15.78,5.49L15.73,5.73L17.00,6.46L17.59,7.10L18.12,8.12L18.22,8.76L18.17,9.93L17.78,10.90L17.54,11.15L17.54,11.34L17.68,11.44L19.34,11.39L19.49,11.29L19.88,7.93L19.88,6.32L19.49,5.54L18.76,4.85L18.76,4.71L20.12,3.34L20.17,3.05L19.73,2.61L19.44,2.51L18.32,3.59L18.12,3.39L18.12,2.37L17.93,2.22L17.20,2.27L17.05,2.51L17.10,3.29L16.95,3.54L16.80,3.54L15.83,2.56Z","food":"M8.37,13.68L8.02,13.63L2.51,19.20L2.22,19.88L2.22,20.56L2.41,21.10L2.85,21.59L3.68,21.93L4.12,21.93L4.80,21.63L10.46,16.07L10.46,15.78ZM17.83,2.37L17.68,2.37L13.73,6.32L13.24,6.95L12.90,7.83L12.85,8.76L15.34,11.24L16.61,11.10L17.29,10.76L21.73,6.37L21.68,6.17L21.20,5.68L20.95,5.63L18.12,8.51L17.73,8.51L17.20,7.98L17.15,7.68L20.02,4.80L20.02,4.51L19.54,4.02L19.20,4.12L16.41,6.90L16.17,6.95L15.49,6.27L15.54,6.02L18.41,3.15L18.41,2.90ZM3.98,2.27L3.54,3.15L3.24,5.05L3.59,6.80L4.17,7.73L11.20,14.80L11.59,14.90L12.22,14.27L12.51,14.22L19.05,21.54L19.83,21.93L20.61,21.88L21.24,21.54L21.59,21.15L21.83,20.56L21.83,19.93L21.54,19.24L4.61,2.32Z","bills":"M5.20,2.61L5.10,2.80L5.10,21.49L5.44,21.54L6.76,20.80L7.20,20.76L9.59,21.93L11.68,20.80L12.17,20.76L14.56,21.93L16.66,20.80L17.10,20.76L18.71,21.59L18.90,21.54L18.90,2.71L18.80,2.61L18.46,2.66L17.44,3.24L16.80,3.39L14.71,2.32L14.41,2.27L12.51,3.24L11.83,3.39L9.88,2.37L9.44,2.27L7.24,3.39L6.90,3.39L5.54,2.66ZM8.51,16.71L8.90,16.32L13.83,16.32L14.12,16.51L14.22,16.85L13.93,17.24L9.00,17.29L8.61,17.05ZM8.51,14.07L8.71,13.78L9.10,13.63L13.63,13.63L14.12,13.88L14.22,14.27L13.83,14.66L8.95,14.66L8.56,14.37ZM8.51,11.29L8.95,10.85L13.83,10.85L14.17,11.20L14.22,11.59L13.78,12.02L8.95,12.02L8.56,11.68ZM8.51,7.05L8.95,6.66L15.20,6.66L15.54,6.90L15.59,7.29L15.29,7.63L8.90,7.63L8.61,7.44Z","shopping":"M2.51,3.24L2.17,3.68L2.22,3.98L2.51,4.27L5.63,4.32L5.88,4.56L7.88,13.59L7.05,14.41L6.85,15.00L6.85,15.59L7.10,16.22L7.54,16.66L8.07,16.95L8.85,16.95L9.10,17.10L8.27,17.83L8.02,18.41L8.02,19.10L8.27,19.73L8.71,20.17L9.34,20.46L10.17,20.41L10.66,20.17L11.10,19.73L11.39,19.05L11.39,18.46L11.05,17.73L10.32,17.15L10.56,16.95L17.00,16.95L17.24,17.15L16.46,17.78L16.17,18.37L16.17,19.15L16.46,19.78L16.80,20.12L17.54,20.46L18.17,20.46L18.80,20.17L19.24,19.73L19.54,19.05L19.54,18.51L19.29,17.88L18.41,17.10L18.71,16.95L19.20,16.95L19.49,16.66L19.54,16.32L19.15,15.93L8.37,15.88L8.02,15.63L7.93,15.05L8.41,14.61L19.24,14.56L19.59,14.07L21.39,7.49L21.59,7.10L21.83,6.17L21.73,5.68L21.20,5.44L7.54,5.49L7.15,5.29L6.71,3.54L6.37,3.24Z","travel":"M2.76,3.59L2.37,4.27L2.17,5.20L2.32,6.37L5.29,11.59L5.44,11.68L12.37,11.73L13.29,12.46L13.68,13.54L13.49,14.37L13.24,14.76L12.85,15.15L12.17,15.49L5.59,15.54L4.76,15.88L3.88,16.66L3.54,17.15L3.29,17.88L3.29,18.95L3.54,19.68L3.88,20.17L4.80,21.00L5.83,21.34L18.71,21.29L21.63,16.32L21.83,15.59L21.83,14.66L21.63,13.88L21.29,13.24L20.27,12.32L19.29,11.98L18.07,11.98L17.05,12.37L16.12,13.24L15.83,13.73L15.54,14.66L15.54,15.59L15.83,16.46L17.88,19.83L17.93,20.12L17.83,20.22L6.37,20.27L5.54,20.17L4.66,19.49L4.37,18.90L4.41,17.78L4.76,17.24L5.44,16.71L6.17,16.56L12.12,16.56L12.90,16.37L13.63,15.88L14.32,15.10L14.61,14.46L14.71,13.39L14.61,12.71L14.22,11.93L13.54,11.20L13.00,10.85L11.88,10.56L6.22,10.56L6.07,10.32L8.07,7.05L8.46,6.07L8.46,4.85L8.17,3.98L7.39,3.00L6.51,2.46L5.98,2.32L4.46,2.37L3.68,2.71ZM18.46,14.07L18.80,14.07L19.29,14.32L19.68,14.90L19.59,15.68L19.29,16.02L18.85,16.22L18.07,16.07L17.59,15.39L17.68,14.71L18.07,14.27ZM4.95,4.41L5.73,4.41L6.37,5.15L6.37,5.73L6.12,6.12L5.63,6.46L4.90,6.41L4.37,5.88L4.37,5.00Z","fun":"M3.88,7.54L3.24,8.76L2.66,10.37L2.37,11.59L2.17,13.63L2.41,16.61L2.71,17.39L3.49,18.07L4.41,18.12L5.00,17.83L6.02,17.00L8.02,14.90L8.71,14.61L15.39,14.66L15.93,14.95L18.12,17.24L19.34,18.07L20.37,18.07L20.76,17.83L21.24,17.24L21.59,16.07L21.68,14.95L21.63,12.37L21.34,10.80L20.76,9.00L20.17,7.83L18.95,6.22L18.12,5.63L17.29,5.29L15.93,5.24L14.66,5.59L13.24,6.41L12.71,6.56L11.20,6.56L10.66,6.41L10.02,5.98L8.51,5.34L6.95,5.24L5.98,5.54L5.29,5.93L4.66,6.51ZM15.54,10.37L15.93,10.37L16.41,10.56L16.85,11.24L16.85,11.59L16.66,12.02L15.98,12.46L15.54,12.46L15.10,12.27L14.66,11.68L14.76,10.95L15.10,10.56ZM18.02,9.05L18.80,9.05L19.34,9.49L19.49,9.78L19.54,10.17L19.34,10.61L18.80,11.05L18.12,11.10L17.63,10.80L17.29,10.32L17.29,9.83L17.44,9.54ZM7.39,8.12L8.02,8.17L8.32,8.41L8.32,9.44L8.41,9.59L9.44,9.63L9.83,10.12L9.83,10.51L9.49,11.00L8.41,11.00L8.32,11.10L8.27,12.17L7.73,12.51L7.29,12.51L6.80,12.17L6.80,11.24L6.71,11.05L5.73,11.00L5.34,10.51L5.34,10.12L5.63,9.68L6.71,9.63L6.85,9.54L6.90,8.37ZM15.49,7.34L16.22,7.44L16.66,7.83L16.85,8.27L16.85,8.71L16.66,9.20L16.12,9.63L15.39,9.63L14.90,9.24L14.66,8.80L14.71,8.07L15.10,7.59Z","medical":"M13.68,9.93L13.49,9.98L11.44,14.41L10.95,14.90L10.61,14.90L10.27,14.66L8.66,12.17L8.17,12.80L7.73,13.10L4.37,13.10L4.37,13.34L11.83,20.66L12.17,20.66L12.46,20.46L19.63,13.34L19.63,13.10L15.68,13.10L15.39,12.95L15.00,12.46ZM2.37,7.15L2.17,8.37L2.37,10.22L3.10,11.73L7.20,11.78L7.54,11.49L7.93,10.76L8.32,10.32L8.76,10.27L9.34,10.80L10.66,12.90L11.10,12.22L12.95,8.17L13.34,7.83L13.78,7.83L14.07,8.07L15.93,11.54L16.22,11.78L20.80,11.78L21.29,11.15L21.63,10.27L21.83,9.20L21.83,8.17L21.63,7.10L21.20,6.07L20.46,5.00L19.15,3.83L18.07,3.29L16.80,2.95L15.34,2.95L14.22,3.24L13.44,3.59L12.07,4.51L11.73,4.41L10.37,3.49L8.66,2.95L7.20,2.95L6.22,3.20L4.85,3.83L3.59,4.95L3.00,5.73Z","care":"M3.49,14.17L3.49,16.76L3.59,17.29L3.93,18.07L4.37,18.71L4.95,19.29L5.88,19.93L5.98,21.15L6.46,21.44L6.90,21.20L7.00,20.32L7.15,20.17L16.85,20.17L17.05,20.41L17.10,21.15L17.59,21.44L17.93,21.29L18.12,21.00L18.12,20.02L18.22,19.83L19.15,19.24L19.63,18.76L20.17,17.98L20.46,17.24L20.56,14.17L20.37,14.02L3.63,14.02ZM2.17,10.85L2.17,11.24L2.46,12.02L2.95,12.51L3.98,12.85L20.02,12.85L21.05,12.51L21.59,11.98L21.83,11.34L21.83,10.76L21.59,10.12L20.90,9.49L20.27,9.29L3.73,9.29L3.29,9.39L2.76,9.73L2.37,10.22ZM11.59,5.68L11.29,5.34L10.85,5.29L10.56,5.10L10.46,4.56L10.17,4.02L9.59,3.39L9.00,3.00L7.83,2.71L6.71,2.90L5.93,3.34L5.44,3.83L5.00,4.51L4.71,5.34L4.71,7.93L4.90,8.07L5.63,8.02L5.73,7.93L5.88,5.15L6.12,4.66L6.66,4.12L7.24,3.83L8.22,3.83L8.85,4.17L9.24,4.56L9.49,5.15L9.00,5.34L8.71,5.78L8.80,6.12L9.10,6.37L11.20,6.37L11.54,6.07Z","edu":"M5.59,12.71L5.59,15.20L5.78,15.44L11.59,18.17L12.66,18.12L18.22,15.44L18.41,15.20L18.41,12.71L18.32,12.61L12.17,15.59L11.68,15.54L5.78,12.61ZM20.71,11.49L20.51,11.49L20.12,11.88L20.12,16.95L19.63,18.22L19.68,18.51L20.32,19.34L20.71,19.24L21.29,18.32L20.80,17.00L20.80,11.63ZM2.17,9.68L2.22,9.93L11.78,14.61L12.22,14.61L21.44,10.17L21.83,9.88L21.83,9.63L21.63,9.44L12.17,4.90L11.83,4.90L2.46,9.39Z","gift":"M13.44,11.34L13.34,11.54L13.34,21.78L13.54,21.93L19.59,21.93L19.98,21.73L20.41,21.29L20.56,20.56L20.56,11.59L20.46,11.34ZM3.63,11.29L3.49,11.44L3.54,21.20L3.98,21.68L4.46,21.93L10.61,21.88L10.71,21.68L10.61,11.39L10.46,11.29ZM2.17,7.20L2.17,9.39L2.51,9.83L2.80,9.93L21.20,9.93L21.49,9.83L21.78,9.54L21.88,9.15L21.83,7.15L21.63,6.66L21.00,6.17L19.54,6.17L19.20,5.98L19.49,5.00L19.29,3.78L19.00,3.29L18.46,2.76L17.44,2.32L16.27,2.37L15.63,2.66L13.49,4.51L13.29,4.51L12.95,4.22L12.41,4.02L11.39,4.07L10.80,4.46L10.51,4.51L8.37,2.66L7.49,2.32L6.32,2.37L5.49,2.80L5.05,3.24L4.71,3.83L4.56,4.41L4.56,5.15L4.80,6.02L4.41,6.17L3.00,6.17L2.41,6.61ZM18.17,4.27L18.27,4.56L18.17,5.39L17.39,6.07L14.27,6.17L13.93,5.98L14.12,5.59L16.07,3.83L16.56,3.54L17.34,3.54L17.83,3.83ZM5.83,4.27L6.22,3.78L6.61,3.54L7.44,3.54L7.93,3.83L10.07,5.83L10.07,6.02L9.73,6.17L6.61,6.07L6.27,5.88L5.83,5.34L5.73,4.90Z","hobby":"M2.17,21.05L2.17,21.83L2.32,21.93L21.68,21.93L21.88,21.78L21.59,19.88L20.76,18.61L19.93,17.93L19.39,17.63L18.32,17.34L17.34,17.34L16.51,17.54L15.44,16.32L14.41,15.59L13.59,15.24L12.27,15.00L10.41,15.24L9.54,15.63L8.46,16.41L7.49,17.54L6.71,17.34L5.68,17.34L4.76,17.59L4.07,17.93L3.05,18.85L2.37,20.02ZM11.15,8.51L10.46,9.00L11.10,10.51L11.34,11.59L11.44,13.59L11.54,13.73L12.46,13.73L12.56,13.63L12.61,11.88L12.85,10.76L13.54,8.95L12.71,8.51L12.37,8.95L12.27,9.39L11.98,9.59L11.78,9.44L11.44,8.61ZM21.78,3.98L20.80,3.00L19.34,2.37L17.63,2.27L16.76,2.37L15.78,2.66L14.07,3.59L13.24,4.32L12.76,4.95L12.27,6.02L12.22,7.10L12.32,7.63L12.46,7.93L12.76,8.07L13.44,7.10L14.51,6.02L15.98,5.00L17.10,4.51L17.54,5.24L17.54,5.59L16.46,6.17L15.24,7.05L14.41,7.88L13.88,8.71L14.02,8.80L15.63,8.71L17.49,8.17L18.56,7.59L20.02,6.41L21.59,4.56ZM2.27,3.93L2.37,4.41L3.24,5.63L4.95,7.24L6.51,8.17L7.29,8.46L8.71,8.76L10.02,8.80L10.12,8.71L9.59,7.88L8.71,7.00L7.63,6.22L6.51,5.63L6.46,5.24L6.76,4.66L6.95,4.51L8.12,5.05L9.39,5.93L10.32,6.80L11.24,8.07L11.39,8.07L11.63,7.78L11.78,6.32L11.68,5.78L11.00,4.61L9.93,3.59L8.37,2.71L6.95,2.32L5.44,2.27L4.66,2.37L3.24,3.00Z","loan":"M9.68,12.66L9.73,12.90L10.32,13.20L10.66,12.85L10.61,12.66L10.17,12.51L9.88,12.51ZM14.32,12.02L12.80,12.66L12.22,13.10L11.20,14.22L10.61,15.39L10.41,16.27L10.37,17.54L10.51,18.37L10.85,19.34L11.20,19.93L11.78,20.66L12.51,21.29L13.68,21.93L14.56,22.17L16.22,22.22L17.98,21.63L18.76,21.10L19.59,20.27L20.12,19.44L20.46,18.61L20.66,17.63L20.66,16.51L20.41,15.39L19.83,14.22L18.76,13.05L18.22,12.66L16.76,12.02L15.83,11.93ZM16.61,17.63L17.00,17.73L17.29,18.02L17.29,18.51L17.15,18.71L16.71,18.90L16.12,18.51L16.12,18.02ZM17.05,15.29L17.24,15.49L17.34,15.88L17.00,16.46L14.71,18.76L14.41,18.90L13.88,18.76L13.68,18.41L13.68,18.12L14.02,17.63L16.37,15.34L16.71,15.20ZM14.12,15.20L14.61,15.29L14.90,15.68L14.80,16.07L14.41,16.41L13.98,16.37L13.68,15.98L13.73,15.49ZM12.76,8.17L11.83,8.51L8.22,8.51L7.54,8.17L7.24,8.17L4.76,11.24L4.17,12.17L3.59,13.44L3.34,14.51L3.34,15.34L3.54,16.51L3.93,17.39L4.41,18.07L5.39,18.90L6.95,19.59L8.56,19.88L9.44,19.93L9.68,19.78L9.39,19.10L9.15,18.02L9.10,16.51L8.61,16.22L8.27,15.73L8.37,15.39L8.66,15.10L9.29,15.15L9.63,14.66L9.63,14.37L9.10,14.02L8.51,13.39L8.41,13.00L8.46,12.32L8.76,11.83L9.83,10.76L10.41,10.90L10.56,11.24L11.24,11.68L11.49,12.02L13.05,11.15L13.98,10.85L14.76,10.76L14.56,10.32ZM7.98,6.61L7.98,6.80L8.22,7.15L8.71,7.29L11.44,7.29L11.73,7.20L12.02,6.85L11.93,6.41L11.59,6.17L8.41,6.17ZM7.00,3.63L7.10,4.32L7.88,4.95L12.17,4.95L12.80,4.46L13.00,4.02L13.00,3.59L12.80,3.10L12.41,2.71L12.12,2.61L7.88,2.61L7.34,2.95Z","invest":"M10.80,14.46L10.66,14.85L10.66,20.56L10.76,20.90L10.95,21.05L14.95,21.00L15.15,20.56L15.15,14.80L15.05,14.51L14.76,14.37L11.00,14.37ZM7.39,11.78L6.85,11.78L3.68,15.15L3.63,20.56L3.73,20.90L3.93,21.05L7.83,21.05L8.07,20.80L8.12,12.22ZM20.07,7.68L19.78,7.68L17.34,10.41L17.34,20.71L17.44,20.95L17.63,21.05L21.54,21.05L21.78,20.71L21.78,8.46L21.68,8.37L21.00,8.37ZM21.29,3.93L21.05,3.78L17.68,4.07L17.59,4.32L18.85,5.39L18.90,5.78L13.34,11.73L12.80,11.68L8.51,10.02L6.51,9.39L5.29,10.51L2.32,13.63L2.12,13.93L2.12,14.22L2.41,14.56L2.76,14.61L2.95,14.51L6.85,10.56L13.34,12.95L13.83,12.85L19.73,6.41L20.07,6.41L21.15,7.34L21.54,7.39L21.59,6.90Z","salary":"M10,2H14A2,2 0 0,1 16,4V6H20A2,2 0 0,1 22,8V19A2,2 0 0,1 20,21H4C2.89,21 2,20.1 2,19V8C2,6.89 2.89,6 4,6H8V4C8,2.89 8.89,2 10,2M14,6V4H10V6H14Z","sale":"M3.93,8.17L3.88,15.63L3.98,15.73L16.56,15.78L16.66,15.68L16.71,8.37L16.56,8.07L12.37,8.07L12.22,8.27L12.22,8.95L11.88,9.24L8.51,9.24L8.22,8.95L8.22,8.27L8.07,8.07L4.07,8.07ZM12.22,5.93L12.22,6.61L12.51,6.80L16.46,6.80L16.71,6.56L16.71,6.02L16.51,5.78L12.46,5.78ZM9.63,5.83L9.49,6.02L9.54,7.83L10.56,7.98L10.85,7.88L10.85,5.88L10.66,5.78ZM3.88,6.02L3.93,6.66L4.37,6.80L7.98,6.80L8.22,6.61L8.22,5.93L8.02,5.78L4.22,5.78ZM21.88,3.54L18.80,3.49L18.51,3.63L18.51,16.80L18.41,16.95L2.32,17.00L2.17,17.10L2.17,17.98L2.46,18.12L3.29,18.12L3.44,18.22L3.34,19.15L3.54,19.78L3.83,20.17L4.76,20.76L5.63,20.76L6.27,20.46L6.66,20.12L7.00,19.59L7.00,18.27L7.24,18.07L13.24,18.07L13.54,18.22L13.49,19.39L13.88,20.12L14.76,20.71L15.78,20.76L16.46,20.41L16.90,19.98L17.24,19.15L17.24,18.66L17.10,18.37L17.20,18.17L17.54,18.07L19.54,18.07L19.59,4.80L19.78,4.56L21.78,4.56L21.93,4.37Z","cashback":"M14.41,13.24L14.12,13.73L14.12,14.37L14.32,14.76L14.56,14.85L14.90,14.41L14.90,13.68L14.61,13.24ZM9.44,9.93L9.15,10.27L9.10,10.95L9.39,11.44L9.63,11.44L9.88,11.15L9.93,10.46L9.73,10.02ZM2.17,8.56L2.17,11.59L2.51,11.73L3.54,11.68L3.83,11.98L3.83,12.71L3.68,12.95L2.32,13.00L2.17,13.15L2.17,16.22L2.27,16.32L3.10,16.37L3.59,16.66L4.02,17.24L4.07,18.02L4.27,18.22L19.73,18.22L19.88,18.07L19.93,17.24L20.12,16.90L20.71,16.41L21.63,16.32L21.78,16.17L21.73,13.10L21.59,13.00L20.37,13.00L20.17,12.80L20.17,11.88L20.27,11.73L21.49,11.73L21.78,11.54L21.78,8.61L21.59,8.37L20.66,8.22L20.17,7.83L19.93,7.44L19.88,6.56L19.68,6.41L4.37,6.41L4.07,6.56L4.07,7.24L3.63,7.98L3.00,8.32L2.32,8.37ZM14.02,12.07L15.00,12.07L15.63,12.37L16.07,12.80L16.37,13.39L16.41,14.41L16.07,15.24L15.54,15.73L14.85,15.98L14.17,15.98L13.34,15.63L12.90,15.20L12.61,14.46L12.61,13.59L12.95,12.80L13.39,12.37ZM15.05,8.85L15.10,9.05L14.95,9.39L10.76,15.54L10.37,15.88L8.95,15.83L8.90,15.59L13.20,9.20L13.63,8.80ZM8.80,8.80L10.02,8.80L10.56,9.10L11.10,9.73L11.29,10.46L11.15,11.54L10.85,12.02L10.17,12.56L9.73,12.66L8.66,12.56L8.17,12.27L7.63,11.54L7.54,10.90L7.63,9.93L8.27,9.10Z","payback":"M5.93,21.24L6.17,21.49L15.68,21.49L16.56,21.34L17.24,21.00L21.39,18.22L21.78,17.59L21.83,16.95L21.59,16.41L21.29,16.12L20.85,15.88L20.17,15.88L17.73,17.34L17.24,18.56L16.27,19.39L15.54,19.63L12.12,19.63L11.63,19.15L11.68,18.76L11.93,18.46L15.15,18.41L15.93,18.12L16.32,17.68L16.41,17.39L16.37,16.61L16.07,16.17L15.34,15.78L11.88,15.78L10.66,15.00L9.78,14.71L7.88,14.71L6.56,15.24L5.93,15.78ZM2.46,14.32L2.17,14.76L2.17,21.78L2.46,22.22L4.17,22.27L4.66,21.88L4.66,14.66L4.51,14.41L4.22,14.27ZM9.78,7.93L10.12,8.56L10.37,8.61L10.61,8.41L10.51,8.02ZM9.98,6.27L10.12,6.66L10.80,6.76L10.76,6.41L10.41,6.07L10.22,6.07ZM15.10,3.59L15.05,3.73L15.49,4.27L16.07,5.49L16.37,6.90L16.37,7.78L16.17,8.71L16.76,9.73L16.56,10.07L16.22,10.07L15.83,10.32L15.83,10.85L18.51,14.02L19.10,14.02L21.63,11.05L21.83,10.46L21.44,10.07L20.66,10.07L20.37,9.83L20.12,9.00L19.54,7.73L18.17,5.83L16.66,4.46ZM9.54,2.66L8.51,2.95L7.88,3.29L7.15,3.83L6.51,4.51L5.88,5.59L5.63,6.37L5.59,8.22L6.22,9.88L6.61,10.41L7.54,11.29L8.85,11.98L9.88,12.17L10.71,12.17L11.78,11.98L12.56,11.63L13.34,11.10L14.02,10.41L14.90,8.80L15.10,7.49L14.90,6.02L14.56,5.20L13.78,4.12L13.20,3.59L12.12,2.95L11.49,2.76L10.41,2.61ZM10.12,4.32L10.71,4.41L10.95,4.90L11.68,5.59L11.93,6.12L11.59,6.71L10.95,6.85L11.68,7.49L11.93,8.17L11.88,8.61L11.63,9.24L10.95,9.83L10.80,10.27L10.51,10.51L10.12,10.51L9.83,10.27L9.63,9.78L9.10,9.34L8.76,8.66L8.80,8.22L9.05,7.98L9.59,7.83L9.10,7.39L8.80,6.90L8.80,5.88L9.05,5.44L9.68,4.85L9.83,4.51Z","people":"M8.85,16.66L8.56,17.88L8.56,19.78L8.95,20.12L10.37,20.46L12.56,20.61L14.17,20.46L15.15,20.17L15.49,19.88L15.44,17.15L14.85,16.12L14.12,15.54L13.29,15.24L10.61,15.29L9.49,15.88ZM11.68,10.95L11.00,11.20L10.32,11.88L10.02,12.71L10.07,13.44L10.37,14.12L11.05,14.76L11.88,14.95L12.66,14.90L13.24,14.61L13.73,14.07L14.02,13.39L14.02,12.56L13.68,11.78L13.05,11.20L12.37,10.95ZM13.54,10.85L13.59,11.05L14.32,11.83L14.61,12.71L14.61,13.24L14.37,14.07L13.83,14.80L14.80,15.39L15.24,15.83L15.78,16.76L15.93,17.39L15.93,19.10L16.02,19.24L17.29,19.24L19.05,19.00L21.73,18.27L21.78,14.37L21.68,13.73L21.34,12.80L20.41,11.63L19.34,10.90L18.22,10.56L14.22,10.56ZM4.76,10.85L3.73,11.49L3.15,12.07L2.41,13.29L2.17,14.46L2.17,18.12L2.51,18.41L4.90,19.00L7.83,19.29L8.02,19.15L8.02,17.44L8.32,16.51L8.66,15.98L9.29,15.34L10.22,14.85L9.68,13.98L9.49,12.71L9.73,11.88L10.51,10.85L9.83,10.56L5.78,10.56ZM15.73,3.68L14.95,3.88L14.51,4.12L13.54,5.05L13.15,5.83L12.95,7.20L13.29,8.41L13.78,9.15L14.80,9.93L15.54,10.17L16.61,10.22L17.78,9.83L18.71,9.05L19.29,8.02L19.44,6.66L19.29,5.83L19.00,5.24L18.22,4.37L17.34,3.83L16.66,3.68ZM7.34,3.68L6.66,3.83L6.02,4.17L5.00,5.20L4.56,6.41L4.56,7.49L4.71,8.12L5.05,8.76L5.83,9.59L6.95,10.12L8.22,10.22L9.39,9.83L10.32,9.05L10.80,8.27L11.05,7.49L11.10,6.71L10.76,5.49L9.83,4.37L8.90,3.83L8.27,3.68Z","family":"M8.85,16.66L8.56,17.88L8.56,19.78L8.95,20.12L10.37,20.46L12.56,20.61L14.17,20.46L15.15,20.17L15.49,19.88L15.44,17.15L14.85,16.12L14.12,15.54L13.29,15.24L10.61,15.29L9.49,15.88ZM11.68,10.95L11.00,11.20L10.32,11.88L10.02,12.71L10.02,13.24L10.37,14.12L11.05,14.76L11.88,14.95L12.66,14.90L13.24,14.61L13.73,14.07L14.02,13.39L14.02,12.56L13.68,11.78L13.05,11.20L12.37,10.95ZM13.54,10.85L13.59,11.05L14.32,11.83L14.61,12.71L14.56,13.49L14.37,14.07L13.83,14.80L14.80,15.39L15.24,15.83L15.78,16.76L15.93,17.39L15.93,19.10L16.02,19.24L17.29,19.24L19.05,19.00L21.73,18.27L21.78,14.37L21.63,13.49L21.00,12.27L20.37,11.59L19.34,10.90L18.22,10.56L14.22,10.56ZM4.76,10.85L3.73,11.49L3.15,12.07L2.41,13.29L2.17,14.51L2.17,18.12L2.51,18.41L4.90,19.00L7.83,19.29L8.02,19.15L8.02,17.44L8.32,16.51L8.66,15.98L9.29,15.34L10.22,14.85L9.68,13.98L9.49,12.71L9.73,11.88L10.51,10.85L9.83,10.56L5.78,10.56ZM15.73,3.68L14.95,3.88L14.51,4.12L13.54,5.05L13.15,5.83L12.95,7.20L13.29,8.41L13.78,9.15L14.80,9.93L15.54,10.17L16.61,10.22L17.78,9.83L18.71,9.05L19.29,8.02L19.44,6.66L19.29,5.83L19.00,5.24L18.22,4.37L17.34,3.83L16.66,3.68ZM7.34,3.68L6.66,3.83L6.02,4.17L5.00,5.20L4.56,6.41L4.56,7.49L4.71,8.12L5.05,8.76L5.83,9.59L6.95,10.12L8.22,10.22L9.39,9.83L10.32,9.05L10.80,8.27L11.05,7.49L11.10,6.71L10.76,5.49L9.83,4.37L8.90,3.83L8.27,3.68Z","star":"M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z","car":"M5,11L6.5,6.5H17.5L19,11M17.5,16A1.5,1.5 0 0,1 16,14.5A1.5,1.5 0 0,1 17.5,13A1.5,1.5 0 0,1 19,14.5A1.5,1.5 0 0,1 17.5,16M6.5,16A1.5,1.5 0 0,1 5,14.5A1.5,1.5 0 0,1 6.5,13A1.5,1.5 0 0,1 8,14.5A1.5,1.5 0 0,1 6.5,16M18.92,6C18.72,5.42 18.16,5 17.5,5H6.5C5.84,5 5.28,5.42 5.08,6L3,12V20A1,1 0 0,0 4,21H5A1,1 0 0,0 6,20V19H18V20A1,1 0 0,0 19,21H20A1,1 0 0,0 21,20V12L18.92,6Z","phone":"M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V3C19,1.89 18.1,1 17,1Z","coffee":"M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z","fitness":"M20.57,14.86L22,13.43L20.57,12L17,15.57L8.43,7L12,3.43L10.57,2L9.14,3.43L7.71,2L5.57,4.14L4.14,2.71L2.71,4.14L4.14,5.57L2,7.71L3.43,9.14L2,10.57L3.43,12L7,8.43L15.57,17L12,20.57L13.43,22L14.86,20.57L16.29,22L18.43,19.86L19.86,21.29L21.29,19.86L19.86,18.43L22,16.29L20.57,14.86Z","music":"M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z","book":"M12 21.5C10.65 20.65 8.2 20 6.5 20C4.85 20 3.15 20.3 1.75 21.05C1.65 21.1 1.6 21.1 1.5 21.1C1.25 21.1 1 20.85 1 20.6V6C1.6 5.55 2.25 5.25 3 5C4.11 4.65 5.33 4.5 6.5 4.5C8.45 4.5 10.55 4.9 12 6C13.45 4.9 15.55 4.5 17.5 4.5C18.67 4.5 19.89 4.65 21 5C21.75 5.25 22.4 5.55 23 6V20.6C23 20.85 22.75 21.1 22.5 21.1C22.4 21.1 22.35 21.1 22.25 21.05C20.85 20.3 19.15 20 17.5 20C15.8 20 13.35 20.65 12 21.5M12 8V19.5C13.35 18.65 15.8 18 17.5 18C18.7 18 19.9 18.15 21 18.5V7C19.9 6.65 18.7 6.5 17.5 6.5C15.8 6.5 13.35 7.15 12 8M13 11.5C14.11 10.82 15.6 10.5 17.5 10.5C18.41 10.5 19.26 10.59 20 10.78V9.23C19.13 9.08 18.29 9 17.5 9C15.73 9 14.23 9.28 13 9.84V11.5M17.5 11.67C15.79 11.67 14.29 11.93 13 12.46V14.15C14.11 13.5 15.6 13.16 17.5 13.16C18.54 13.16 19.38 13.24 20 13.4V11.9C19.13 11.74 18.29 11.67 17.5 11.67M20 14.57C19.13 14.41 18.29 14.33 17.5 14.33C15.67 14.33 14.17 14.6 13 15.13V16.82C14.11 16.16 15.6 15.83 17.5 15.83C18.54 15.83 19.38 15.91 20 16.07V14.57Z","plane":"M20.56 3.91C21.15 4.5 21.15 5.45 20.56 6.03L16.67 9.92L18.79 19.11L17.38 20.53L13.5 13.1L9.6 17L9.96 19.47L8.89 20.53L7.13 17.35L3.94 15.58L5 14.5L7.5 14.87L11.37 11L3.94 7.09L5.36 5.68L14.55 7.8L18.44 3.91C19 3.33 20 3.33 20.56 3.91Z","fuel":"M18,10A1,1 0 0,1 17,9A1,1 0 0,1 18,8A1,1 0 0,1 19,9A1,1 0 0,1 18,10M12,10H6V5H12M19.77,7.23L19.78,7.22L16.06,3.5L15,4.56L17.11,6.67C16.17,7 15.5,7.93 15.5,9A2.5,2.5 0 0,0 18,11.5C18.36,11.5 18.69,11.42 19,11.29V18.5A1,1 0 0,1 18,19.5A1,1 0 0,1 17,18.5V14C17,12.89 16.1,12 15,12H14V5C14,3.89 13.1,3 12,3H6C4.89,3 4,3.89 4,5V21H14V13.5H15.5V18.5A2.5,2.5 0 0,0 18,21A2.5,2.5 0 0,0 20.5,18.5V9C20.5,8.31 20.22,7.68 19.77,7.23Z","pet":"M8.35,3C9.53,2.83 10.78,4.12 11.14,5.9C11.5,7.67 10.85,9.25 9.67,9.43C8.5,9.61 7.24,8.32 6.87,6.54C6.5,4.77 7.17,3.19 8.35,3M15.5,3C16.69,3.19 17.35,4.77 17,6.54C16.62,8.32 15.37,9.61 14.19,9.43C13,9.25 12.35,7.67 12.72,5.9C13.08,4.12 14.33,2.83 15.5,3M3,7.6C4.14,7.11 5.69,8 6.5,9.55C7.26,11.13 7,12.79 5.87,13.28C4.74,13.77 3.2,12.89 2.41,11.32C1.62,9.75 1.9,8.08 3,7.6M21,7.6C22.1,8.08 22.38,9.75 21.59,11.32C20.8,12.89 19.26,13.77 18.13,13.28C17,12.79 16.74,11.13 17.5,9.55C18.31,8 19.86,7.11 21,7.6M19.33,18.38C19.37,19.32 18.65,20.36 17.79,20.75C16,21.57 13.88,19.87 11.89,19.87C9.9,19.87 7.76,21.64 6,20.75C5,20.26 4.31,18.96 4.44,17.88C4.62,16.39 6.41,15.59 7.47,14.5C8.88,13.09 9.88,10.44 11.89,10.44C13.89,10.44 14.95,13.05 16.3,14.5C17.41,15.72 19.26,16.75 19.33,18.38Z","home":"M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z","analysis":"M3 12a2 2 0 0 1 4 0v6a2 2 0 0 1-4 0zM10 6a2 2 0 0 1 4 0v12a2 2 0 0 1-4 0zM17 10a2 2 0 0 1 4 0v8a2 2 0 0 1-4 0z","bank":"M11.5,1L2,6V8H21V6M16,10V17H19V10M2,22H21V19H2M10,10V17H13V10M4,10V17H7V10H4Z","cash":"M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z","card":"M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M20 11H4V8H20Z","plus":"M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z","swap":"M21,9L17,5V8H10V10H17V13M7,11L3,15L7,19V16H14V14H7V11Z","cal":"M9,10V12H7V10H9M13,10V12H11V10H13M17,10V12H15V10H17M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H6V1H8V3H16V1H18V3H19M19,19V8H5V19H19M9,14V16H7V14H9M13,14V16H11V14H13M17,14V16H15V14H17Z","clk":"M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z","calc":"M7,2H17A2,2 0 0,1 19,4V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V4A2,2 0 0,1 7,2M7,4V8H17V4H7M7,10V12H9V10H7M11,10V12H13V10H11M15,10V12H17V10H15M7,14V16H9V14H7M11,14V16H13V14H11M15,14V16H17V14H15M7,18V20H9V18H7M11,18V20H13V18H11M15,18V20H17V18H15Z","note":"M3,3H21V5H3V3M3,7H15V9H3V7M3,11H21V13H3V11M3,15H15V17H3V15M3,19H21V21H3V19Z","hash":"M5.41,21L6.12,17H2.12L2.47,15H6.47L7.53,9H3.53L3.88,7H7.88L8.59,3H10.59L9.88,7H15.88L16.59,3H18.59L17.88,7H21.88L21.53,9H17.53L16.47,15H20.47L20.12,17H16.12L15.41,21H13.41L14.12,17H8.12L7.41,21H5.41M9.53,9L8.47,15H14.47L15.53,9H9.53Z","clip":"M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z","ch":"M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z","chl":"M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z","bolt":"M11 15H6L13 1V9H18L11 23V15Z","grid":"M3,11H11V3H3M3,21H11V13H3M13,21H21V13H13M13,3V11H21V3","list":"M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z","pen":"M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z","x":"M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z","bk":"M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z","help":"M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z","save":"M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z","search":"M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z","eye":"M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z","eyeoff":"M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.08L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.74,7.13 11.35,7 12,7Z","tag":"M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M21.41,11.58L12.41,2.58C12.05,2.22 11.55,2 11,2H4C2.89,2 2,2.89 2,4V11C2,11.55 2.22,12.05 2.59,12.41L11.58,21.41C11.95,21.77 12.45,22 13,22C13.55,22 14.05,21.77 14.41,21.41L21.41,14.41C21.78,14.05 22,13.55 22,13C22,12.44 21.77,11.94 21.41,11.58Z","trash":"M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z","spark":"M12,1L9,9L1,12L9,15L12,23L15,15L23,12L15,9L12,1Z","backup":"M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z"},COL={"others":"#a8bdc8","groceries":"#6070c7","food":"#ff972c","bills":"#d14757","shopping":"#4fc3fc","travel":"#7e57c2","fun":"#7aca7e","medical":"#e85451","care":"#ef865c","edu":"#b261e3","gift":"#00c4ae","hobby":"#bcfa6c","loan":"#d7d59c","invest":"#96c664","salary":"#29b6f6","sale":"#13be90","cashback":"#ed53da","payback":"#ed53da","people":"#4fc3fc","family":"#f294dd","star":"#fbbf24","car":"#26a69a","phone":"#8b9bff","coffee":"#a1887f","fitness":"#ff7043","music":"#ba68c8","book":"#4db6ac","plane":"#64b5f6","fuel":"#ffb74d","pet":"#c0a080","home":"#90caf9"},PICK=["groceries", "food", "bills", "shopping", "travel", "fun", "medical", "care", "edu", "gift", "hobby", "loan", "invest", "salary", "sale", "cashback", "payback", "people", "family", "car", "phone", "coffee", "fitness", "music", "book", "plane", "fuel", "pet", "home", "star", "others"],EM={"🛒":"groceries","🍽️":"food","🧾":"bills","🛍️":"shopping","🚌":"travel","🎮":"fun","🩺":"medical","🛁":"care","🎓":"edu","🎁":"gift","🌱":"hobby","💳":"loan","📈":"invest","⋯":"others","💼":"salary","📦":"sale","🎟️":"cashback","🤝":"payback","⭐":"star"};
+const gi=(k,s=24,c)=>`<svg class="gl" viewBox="0 0 24 24" style="width:${s/10}rem;height:${s/10}rem" fill="${c||'currentColor'}"><path d="${G[k]}"/></svg>`;
+const ci=(c,s=24)=>G[c.icon]?gi(c.icon,s):`<span style="font-size:${s/10}rem;line-height:1">${esc(c.icon)}</span>`;
+const uid=()=>Math.random().toString(36).slice(2,9);
+function fresh(){let i=0;const mk=(t,a)=>a.map(([name,icon])=>({id:uid(),type:t,name,icon,color:(i++,t==='income'&&icon==='others'?'#7790bc':(COL[icon]||PAL[i%12]))}));
+return{name:'',hide:false,acc:[{id:'a1',name:'Bank Account',type:'bank',open:0},{id:'a2',name:'Cash',type:'cash',open:0}],cat:[...mk('expense',EX),...mk('income',IN)],tx:[]}}
+const OLDC={"others": "#a3b8c9", "groceries": "#5c6bc0", "food": "#ff9f2e", "bills": "#e5384f", "shopping": "#42b0f5", "fun": "#4caf6a", "medical": "#e53935", "care": "#f08a5d", "edu": "#ab47bc", "gift": "#00bfa5", "hobby": "#b4e34f", "loan": "#d4cf9a", "invest": "#7cb342", "sale": "#1fbf8f", "cashback": "#ec4fc0", "payback": "#e040a0", "people": "#29b6f6", "family": "#f48fb1"};
+function load(){try{const d=JSON.parse(localStorage.getItem(K));if(d&&d.tx&&d.acc&&d.cat){d.cat.forEach(c=>{const k=EM[c.icon];if(k){c.icon=k;c.color=COL[k]}if(OLDC[c.icon]&&OLDC[c.icon].toLowerCase()===String(c.color).toLowerCase())c.color=(c.type==='income'&&c.icon==='others')?'#7790bc':COL[c.icon]});const RN={'Food & Drink':'Food and Beverage','Bills & Utilities':'Bills and Utilities','Travel':'Travelling','Gifts & Donations':'Gifts and Donation','Sold Items':'Some Kinda Sale','Cashback & Gifts':'Cashback/Gifts'};d.cat.forEach(c=>{if(RN[c.name])c.name=RN[c.name]});[['Achan','people'],['Amma','family']].forEach(([n,i])=>{if(!d.cat.some(c=>c.type==='income'&&c.name===n))d.cat.push({id:uid(),type:'income',name:n,icon:i,color:COL[i]})});const rk=c=>{const l=(c.type==='income'?IN:EX).findIndex(x=>x[0]===c.name);return l<0?99:l};d.cat.sort((a,b)=>rk(a)-rk(b));return d}}catch(e){}return fresh()}
+let S=load(),PV,R,E,pv='grid',PT='acc',V='home',hp='m0',am='month',ao=0,at='expense',ct='expense',q='',tf='all',so=1,D=null;
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){toast('Storage is full, changes may not be saved. Download a backup.')}clearTimeout(window.__sn);window.__sn=setTimeout(schedNotif,1500)};
+const fmt=n=>new Intl.NumberFormat(!S.cur||S.cur==='INR'?'en-IN':'en-US',{style:'currency',currency:S.cur||'INR'}).format(n);
+const sym=()=>{try{return(0).toLocaleString('en',{style:'currency',currency:S.cur||'INR',minimumFractionDigits:0}).replace(/[\d.,\s]/g,'')}catch(e){return S.cur}};
+const norm=()=>{S.tpl=S.tpl||[];S.ab=S.ab||{on:0};S.nt=S.nt||{on:0,daily:0};S.nt.al=S.nt.al||{};S.bud=S.bud||{};S.rec=S.rec||[];S.loans=S.loans||[];S.goals=S.goals||[];S.cur=S.cur||'INR'};norm();
+const m=n=>S.hide?'*****':fmt(n);
+const cat=id=>S.cat.find(c=>c.id===id)||{name:'Unknown',icon:'others',color:'#94a3b8'};
+const acc=id=>S.acc.find(a=>a.id===id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sum=a=>a.reduce((s,t)=>s+t.amt,0);
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const loc=ts=>new Date(ts-new Date(ts).getTimezoneOffset()*6e4).toISOString().slice(0,16);
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const dts=ts=>{const d=new Date(ts);return String(d.getDate()).padStart(2,'0')+' '+MON[d.getMonth()]};
+const tms=ts=>new Date(ts).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+function bal(a){let b=+a.open||0;for(const t of S.tx){if(t.type==='transfer'){if(t.acc===a.id)b-=t.amt;if(t.to===a.id)b+=t.amt}else if(t.acc===a.id)b+=t.type==='income'?t.amt:-t.amt}return b}
+function range(mode,o){const n=new Date(),y=n.getFullYear();let a,b;
+if(mode==='week'){a=new Date(y,n.getMonth(),n.getDate()-((n.getDay()+6)%7)+o*7);b=new Date(a.getFullYear(),a.getMonth(),a.getDate()+7)}
+else if(mode==='month'){a=new Date(y,n.getMonth()+o,1);b=new Date(a.getFullYear(),a.getMonth()+1,1)}
+else if(mode==='year'){a=new Date(y+o,0,1);b=new Date(y+o+1,0,1)}
+else{a=new Date(0);b=new Date(8.64e15)}return[+a,+b,a,b]}
+const inR=(a,b)=>S.tx.filter(t=>t.type!=='transfer'&&t.ts>=a&&t.ts<b);
+const row=(t,tm)=>{const tr=t.type==='transfer',c=tr?{icon:'swap',color:'#94a3b8',name:'Transfer'}:cat(t.cat),a=acc(t.acc)||{name:'?'};
+return`<div class="tr" data-a="edit" data-id="${t.id}"><i style="--c:${c.color};background:${c.color}33">${ci(c,21)}</i><div class="g"><b>${esc(t.title||c.name)}</b><small class="as">${AM(a)}<span>${esc(a.name)}${tr?' → '+esc((acc(t.to)||{}).name||'?'):''}</span></small></div><div class="r"><b class="${t.type==='income'?'pos':''}">${m(t.amt)}</b><small>${tm?tms(t.ts):dts(t.ts)}</small></div></div>`};
+const empty='<div class="em">No transactions yet.<br>Tap + to add your first one.</div>';
+function home(){const[a,b]=hp==='m0'?range('month',0):hp==='m1'?range('month',-1):hp==='y0'?range('year',0):range('all',0);
+const l=inR(a,b),sp=sum(l.filter(t=>t.type==='expense')),ic=sum(l.filter(t=>t.type==='income'));
+const av=sum(S.acc.filter(x=>x.type!=='credit').map(x=>({amt:bal(x)}))),r=[...S.tx].sort((x,y)=>y.ts-x.ts).slice(0,3);
+return`<div class="top" style="margin-top:-.55rem"><div class="av"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9.2" r="4.3" fill="#eceff3"/><path d="M3.2 24c.7-5.2 4.5-8 8.8-8s8.1 2.8 8.8 8z" fill="#eceff3"/></svg></div><div class="g"><h1>${S.name?'Hi, '+esc(S.name):'Penny'}</h1><span class="mu sm">Your money, at a glance</span></div><div class="hb"><button class="ib" data-a="nav" data-v="tx" aria-label="Search">${I('search')}</button></div></div>
+<div class="cd cfc"><div class="sp"><span class="lb mu cfl">CASH FLOW <button data-a="hide" aria-label="Toggle balance">${I(S.hide?'eyeoff':'eye','currentColor',18)}</button></span><select class="pill" data-ch="hp"><option value="m0"${hp==='m0'?' selected':''}>This Month</option><option value="m1"${hp==='m1'?' selected':''}>Last Month</option><option value="y0"${hp==='y0'?' selected':''}>This Year</option><option value="all"${hp==='all'?' selected':''}>All Time</option></select></div>
+<div class="sp cr"><div><div class="lb ex">SPENDING</div><div class="amt">${m(sp)}</div></div><div class="r"><div class="lb in">INCOME</div><div class="amt">${m(ic)}</div></div></div>
+<div class="bx"><span class="mu">Available Balance</span><span>${m(av)}</span></div></div>
+${homeX(1)}<div class="sp rh"><h2>Recent Transactions</h2><button class="pill" data-a="nav" data-v="tx">See all</button></div>
+<div class="cd ls">${r.length?r.map(t=>row(t)).join(''):empty}</div>${homeX(0)}`}
+function txv(){return`<div class="top hd"><button class="ib sb" data-a="nav" data-v="home" aria-label="Back">${I('bk')}</button><h1 class="ph" style="flex:1">Transactions</h1><button class="ib sb" data-a="backup" aria-label="Backup">${I('tup')}</button><button class="ib sb" data-a="fsheet" aria-label="Filters">${I('fil')}</button></div><div class="sr"><div class="sbx">${I('search','currentColor',18)}<input id="q" class="sq" placeholder="Search transactions" value="${esc(q)}"></div><label class="ib sb2" aria-label="Filter">${I('fil')}<select class="sf" data-ch="tf"><option value="all">All</option>${['expense','income','transfer'].map(k=>`<option value="${k}"${tf===k?' selected':''}>${cap(k)}</option>`).join('')}</select></label><button class="ib sb2" data-a="sort" aria-label="Sort">${I('srt')}</button></div>${mjump()}${fchips()}<div id="list" class="cd ls"></div>`}
+function list(){const k=q.toLowerCase();const l=S.tx.filter(t=>(tf==='all'||t.type===tf)&&fOk(t)&&(!k||(t.title||'').toLowerCase().includes(k)||cat(t.cat).name.toLowerCase().includes(k)||(t.tags||[]).join(' ').toLowerCase().includes(k))).sort((x,y)=>so*(y.ts-x.ts));
+let h='',d='';const net=ds=>sum(l.filter(t=>t.type==='income'&&new Date(t.ts).toDateString()===ds))-sum(l.filter(t=>t.type==='expense'&&new Date(t.ts).toDateString()===ds));
+for(const t of l){const ds=new Date(t.ts).toDateString();if(ds!==d){d=ds;const n=net(ds);h+=`<div class="day"><span>${new Date(t.ts).toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})}</span><span class="${n>=0?'pos':'mu'}">${n<0?'-':''}${m(Math.abs(n))}</span></div>`}h+=row(t,1)}
+$('#list').innerHTML=h||empty}
+function ana(){const[a,b,ad,bd]=range(am,ao),l=inR(a,b),ex=l.filter(t=>t.type==='expense'),inc=l.filter(t=>t.type==='income'),sp=sum(ex),ic=sum(inc);
+const lab=am==='month'?ad.toLocaleDateString('en-GB',{month:'long',year:'numeric'}):am==='year'?ad.getFullYear():dts(a)+' – '+dts(b-864e5);
+const rows=at==='expense'?ex:inc,tot=sum(rows),by={};rows.forEach(t=>by[t.cat]=(by[t.cat]||0)+t.amt);
+const it=Object.entries(by).map(([id,v])=>({id,v,c:cat(id)})).sort((x,y)=>y.v-x.v);
+let off=0;const R=70,C=2*Math.PI*R,ds=it.map(i=>{const L=i.v/tot*C,s=`<circle cx="100" cy="100" r="${R}" fill="none" stroke="${i.c.color}" stroke-width="34" stroke-dasharray="${L} ${C-L}" stroke-dashoffset="${-off}"/>`;off+=L;return s}).join('');
+const wk=ex.filter(t=>[0,6].includes(new Date(t.ts).getDay())),wd=new Set(wk.map(t=>new Date(t.ts).toDateString())).size;
+const days=Math.max(1,Math.ceil((Math.min(Date.now(),b)-a)/864e5));
+const pm=S.acc.map(x=>({x,s:sum(ex.filter(t=>t.acc===x.id)),i:sum(inc.filter(t=>t.acc===x.id))})).filter(p=>p.s||p.i);
+return`<h1>Analysis</h1><div class="seg">${['week','month','year'].map(k=>`<button class="${am===k?'on':''}" data-a="mode" data-v="${k}">${cap(k)}</button>`).join('')}</div>
+<div class="nv"><button class="ib" data-a="off" data-d="-1" aria-label="Previous">${I('chl')}</button><div><b>${lab}</b><small>${l.length} transactions</small></div><button class="ib" data-a="off" data-d="1" aria-label="Next">${I('ch')}</button></div>
+${l.length?`<div class="cd"><div class="sp"><div><div class="lb ex">SPENDING</div><div class="amt">${m(sp)}</div></div><div class="r"><div class="lb in">INCOME</div><div class="amt">${m(ic)}</div></div></div><div class="bx"><span class="mu">Net balance</span><span>${ic-sp<0?'-':''}${m(Math.abs(ic-sp))}</span></div>${sp&&wk.length?`<p class="mu sm" style="margin:1.4rem 0 0">${I('spark','#fbbf24',14)} ${Math.round(sum(wk)/sp*100)}% of your spending landed on weekends, across ${wd} day${wd>1?'s':''}.</p>`:''}</div>
+${anaX(a,b,sp,ic,ex)}<h2>Categories</h2><div class="cd"><div class="seg" style="width:22rem;margin:0 auto 0.6rem">${['expense','income'].map(k=>`<button class="${at===k?'on':''}" data-a="at" data-v="${k}">${k==='expense'?'Spending':'Income'}</button>`).join('')}</div>
+${it.length?`<svg class="dn" viewBox="0 0 200 200"><g transform="rotate(-90 100 100)">${ds}</g><text x="100" y="88" text-anchor="middle" style="fill:var(--mu);font:600 9px Outfit,sans-serif;letter-spacing:.12em">${at==='expense'?'SPENT':'EARNED'}</text><text class="dt" x="100" y="112" text-anchor="middle" style="font-size:${m(tot).length>10?15:m(tot).length>8?18:22}px">${m(tot)}</text></svg>${it.map(i=>`<div class="tr" data-a="drill" data-q="${esc(i.c.name)}" data-t="${at}" data-f="${a}" data-e="${b}"><i style="--c:${i.c.color};background:${i.c.color}33">${ci(i.c)}</i><div class="g"><b>${esc(i.c.name)}</b></div><div class="r"><b>${m(i.v)}</b><small>${Math.round(i.v/tot*100)}%</small></div></div>`).join('')}`:'<div class="em">Nothing here for this period.</div>'}</div>
+<h2>Payment modes</h2><div class="cd">${pm.map(p=>`<div class="tr" style="cursor:default"><div class="g"><b class="vi">${AI(p.x)}${esc(p.x.name)}</b></div><div class="r"><b class="ex">${m(p.s)}</b><small class="in">+ ${m(p.i)}</small></div></div>`).join('')}</div>
+<h2>Stats</h2><div class="cd"><div class="gr" style="text-align:left"><div><div class="lb ex">AVG SPEND / DAY</div><div class="amt" style="font-size:2.2rem">${m(sp/days)}</div></div><div><div class="lb ex">PER TRANSACTION</div><div class="amt" style="font-size:2.2rem">${m(ex.length?sp/ex.length:0)}</div></div><div><div class="lb in">AVG INCOME / DAY</div><div class="amt" style="font-size:2.2rem">${m(ic/days)}</div></div><div><div class="lb in">PER TRANSACTION</div><div class="amt" style="font-size:2.2rem">${m(inc.length?ic/inc.length:0)}</div></div></div></div>`:`<div class="em">No transactions in this period.</div>`}`}
+function accs(){const g=(t,n)=>{const l=S.acc.filter(a=>a.type===t);return l.length?`<h2 class="vi">${AI({type:t})}${n}</h2>`+l.map(a=>`<div class="cd ar" data-a="eacc" data-id="${a.id}"><span>${esc(a.name)}${a.type==='credit'&&a.due?`<small class="mu" style="display:block;font-size:1.1rem">Due ${dts(nd(a.due))}${a.stmt?' · statement on '+a.stmt+'th':''}</small>`:''}</span><span class="am2"><b>${m(bal(a))}</b>${I('ch','var(--mu)',20)}</span></div>`).join(''):''};
+const av=sum(S.acc.filter(x=>x.type!=='credit').map(x=>({amt:bal(x)}))),cr=sum(S.acc.filter(x=>x.type==='credit').map(x=>({amt:bal(x)})));
+return`<div class="top">${R?`<button class="ib" data-a="nav" data-v="add" aria-label="Back">${I('bk')}</button>`:''}<h1 style="flex:1">All Accounts</h1><button class="pill lg" data-a="eacc">${I('plus','currentColor',18)}Add account</button></div><div class="ir"><span>Transactions based balance, actual may vary. <b>Show balance</b></span><button class="sw ${S.hide?'':'on'}" data-a="hide" aria-label="Show balance"></button></div>
+<div class="gr sg"><div class="cd"><div class="mu">Available Balance</div><div class="amt">${m(av)}</div></div><div class="cd"><div class="mu">Available Credit</div><div class="amt">${m(cr)}</div></div></div>${g('bank','Bank Accounts')}${g('cash','Cash')}${g('credit','Credit')}<div class="tg2" style="margin-top:2.4rem"><div class="tl" data-a="xlsx"><span class="ti">${I('table','#4caf50',20)}</span>Export to Excel</div></div>`}
+function more(){const t=(a,ic,n)=>`<div class="tl" data-a="${a}"><span class="ti">${ic}</span>${n}</div>`;
+return`<div class="cd pf"><div class="pr"><div class="av big">${esc((S.name||'G')[0].toUpperCase())}</div><div class="g"><input id="nm" class="pn" value="${esc(S.name)}" placeholder="Guest User"></div></div><div class="pb"><span class="mu">${S.lastBk?'Last backup '+Math.round((Date.now()-S.lastBk)/864e5)+' day(s) ago.':'No backup yet. Keep a copy somewhere safe.'}</span><button data-a="backup">Backup now</button></div></div>
+<div class="tg2">${t('nav" data-v="cats',I('tag','#8b9bff',20),'Categories')}${t('nav" data-v="rec',I('clk','#fbbf24',20),'Recurring')}${t('nav" data-v="loans',I('cash','#4caf50',20),'Loans &amp; IOUs')}${t('nav" data-v="goals',I('spark','#f472b6',20),'Savings goals')}${t('xlin',I('tup','#4ab3f4',20),'Import Excel')}${t('nav" data-v="nw',I('tup','#34d399',20),'Net worth')}${t('nav" data-v="yr',I('spark','#60a5fa',20),'Yearly summary')}${t('nav" data-v="tpls',I('tag','#fbbf24',20),'Templates')}${t('csv',I('tdn','#a78bfa',20),'Export CSV')}${t('backup',I('backup','#4ab3f4',20),'Backup &amp; restore')}${t('xlsx',I('table','#4caf50',20),'Export to Excel')}${t('reset',I('trash','#ff6b6b',20),'Erase all data')}</div><label style="margin-top:2.4rem">Currency</label><select id="cu">${['INR','USD','EUR','GBP','AED','SGD','AUD','CAD'].map(c=>`<option${S.cur===c?' selected':''}>${c}</option>`).join('')}</select>${ntUI()}${abUI()}<p class="mu sm" style="text-align:center;margin-top:2.4rem">Your data stays on this device, in this browser.</p>`}
+function cats(){const l=S.cat.filter(c=>c.type===ct);return`<div class="top"><button class="ib" data-a="nav" data-v="${R||'more'}" aria-label="Back">${I('bk')}</button><h1 style="flex:1">Categories</h1><button class="pill" data-a="ecat">${I('plus','currentColor',18)}Add</button></div><div class="seg">${['expense','income'].map(k=>`<button class="${ct===k?'on':''}" data-a="ct" data-v="${k}">${cap(k)}</button>`).join('')}</div><div class="gr">${l.map(c=>`<div class="cd" data-a="ecat" data-id="${c.id}"><i style="--c:${c.color};background:${c.color}33">${ci(c,28)}</i>${esc(c.name)}</div>`).join('')}</div>`}
+const $=s=>document.querySelector(s),T={add:addv,home,tx:txv,analysis:ana,accounts:accs,more,cats,rec:recv,loans:loanv,goals:goalv,nw:nwv,yr:yrv,tpls:tplv};
+let LV=null,NK=null,ET;
+function stagger(){const a=$('#app');[...a.children].forEach((c,i)=>c.style.setProperty('--i',i));
+ const ax=a.querySelector('.adx');if(ax)[...ax.children].forEach((c,i)=>c.style.setProperty('--j',i));
+ a.querySelectorAll('.ls,.gr,.pk').forEach(p=>[...p.querySelectorAll('.tr')].forEach((c,i)=>c.style.setProperty('--k',i)));
+ a.querySelectorAll('.gr>*,.cd.ar').forEach((c,i)=>c.style.setProperty('--k',i))}
+function render(){const a=$('#app'),enter=V!==LV;LV=V;document.body.dataset.v=V;a.innerHTML=T[V]();if(V==='tx')list();
+ if(enter){stagger();a.classList.remove('enter');void a.offsetWidth;a.classList.add('enter');clearTimeout(ET);ET=setTimeout(()=>a.classList.remove('enter'),1400)}else a.classList.remove('enter');
+const on=V==='tx'?'home':MV.includes(V)?'more':V,b=(v,i,n)=>`<button class="${on===v?'on':''}" data-a="nav" data-v="${v}"><span>${i}</span>${n}</button>`;
+const nk=V==='add'?'':V==='tx'?'fab':'bar',nv=$('#nav');
+if(nk!==NK){NK=nk;nv.innerHTML=nk===''?'':nk==='fab'?`<button class="fab2" data-a="add" aria-label="Add transaction">${I('plus','currentColor',30)}</button>`:`<div class="bn">${b('home',I('home'),'Home')}${b('analysis',I('analysis'),'Analysis')}<button class="fab" data-a="add" aria-label="Add transaction">${I('plus','currentColor',30)}</button>${b('accounts',I('bank'),'Accounts')}${b('more',I('dots'),'More')}</div>`}
+else if(nk==='bar'){nv.querySelectorAll('.bn button[data-v]').forEach(x=>x.classList.toggle('on',x.dataset.v===on))}}
+let SO;
+function sheet(h){const o=$('#ov');clearTimeout(SO);
+ if(h){const cur=o.querySelector('.ov:not(.out)'),sh=cur&&cur.querySelector('.sh');
+  if(sh){const sc=sh.scrollTop;sh.innerHTML=h;sh.style.animation='none';sh.querySelectorAll(':scope>*').forEach(c=>c.style.animation='none');sh.scrollTop=sc}
+  else o.innerHTML=`<div class="ov" data-a="shut"><div class="sh">${h}</div></div>`;return}
+ const cur=o.querySelector('.ov');if(!cur){o.innerHTML='';return}
+ cur.classList.add('out');SO=setTimeout(()=>{o.innerHTML=''},270)}
+const opts=id=>S.acc.map(a=>`<option value="${a.id}"${a.id===id?' selected':''}>${esc(a.name)}</option>`).join('');
+const head=t=>`<div class="sp"><span>${t}</span><button class="ib" data-a="close" aria-label="Close">${I('x')}</button></div>`;
+const P={"table":"M5,4H19A2,2 0 0,1 21,6V18A2,2 0 0,1 19,20H5A2,2 0 0,1 3,18V6A2,2 0 0,1 5,4M5,8V12H11V8H5M13,8V12H19V8H13M5,14V18H11V14H5M13,14V18H19V14H13Z","tup":"M2,12H4V17H20V12H22V17A2,2 0 0,1 20,19H4A2,2 0 0,1 2,17V12M12,2L6.46,7.46L7.88,8.88L11,5.75V15H13V5.75L16.12,8.88L17.54,7.46L12,2Z","tdn":"M2,12H4V17H20V12H22V17A2,2 0 0,1 20,19H4A2,2 0 0,1 2,17V12M12,15L17.55,9.54L16.13,8.13L13,11.25V2H11V11.25L7.87,8.13L6.46,9.54L12,15Z","fil":"M4,5H20L13.8,12.6V19L10.2,17V12.6Z","srt":"M3,6H21V8H3ZM3,11H15V13H3ZM3,16H9V18H3Z","cal":"M9,10V12H7V10H9M13,10V12H11V10H13M17,10V12H15V10H17M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H6V1H8V3H16V1H18V3H19M19,19V8H5V19H19M9,14V16H7V14H9M13,14V16H11V14H13M17,14V16H15V14H17Z","clk":"M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z","calc":"M7,2H17A2,2 0 0,1 19,4V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V4A2,2 0 0,1 7,2M7,4V8H17V4H7M7,10V12H9V10H7M11,10V12H13V10H11M15,10V12H17V10H15M7,14V16H9V14H7M11,14V16H13V14H11M15,14V16H17V14H15M7,18V20H9V18H7M11,18V20H13V18H11M15,18V20H17V18H15Z","note":"M3,3H21V5H3V3M3,7H15V9H3V7M3,11H21V13H3V11M3,15H15V17H3V15M3,19H21V21H3V19Z","hash":"M5.41,21L6.12,17H2.12L2.47,15H6.47L7.53,9H3.53L3.88,7H7.88L8.59,3H10.59L9.88,7H15.88L16.59,3H18.59L17.88,7H21.88L21.53,9H17.53L16.47,15H20.47L20.12,17H16.12L15.41,21H13.41L14.12,17H8.12L7.41,21H5.41M9.53,9L8.47,15H14.47L15.53,9H9.53Z","clip":"M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z","bank":"M11.5,1L2,6V8H21V6M16,10V17H19V10M2,22H21V19H2M10,10V17H13V10M4,10V17H7V10H4Z","cash":"M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z","card":"M20 4H4A2 2 0 0 0 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V6A2 2 0 0 0 20 4M20 11H4V8H20Z","ch":"M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z","chl":"M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z","bolt":"M11 15H6L13 1V9H18L11 23V15Z","grid":"M3,11H11V3H3M3,21H11V13H3M13,21H21V13H13M13,3V11H21V3","list":"M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z","pen":"M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z","x":"M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z","bk":"M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z","help":"M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z","save":"M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z","search":"M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z","eye":"M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z","eyeoff":"M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.08L19.73,22L21,20.73L3.27,3M12,7A5,5 0 0,1 17,12C17,12.64 16.87,13.26 16.64,13.82L19.57,16.75C21.07,15.5 22.27,13.86 23,12C21.27,7.61 17,4.5 12,4.5C10.6,4.5 9.26,4.75 8,5.2L10.17,7.35C10.74,7.13 11.35,7 12,7Z","tag":"M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M21.41,11.58L12.41,2.58C12.05,2.22 11.55,2 11,2H4C2.89,2 2,2.89 2,4V11C2,11.55 2.22,12.05 2.59,12.41L11.58,21.41C11.95,21.77 12.45,22 13,22C13.55,22 14.05,21.77 14.41,21.41L21.41,14.41C21.78,14.05 22,13.55 22,13C22,12.44 21.77,11.94 21.41,11.58Z","trash":"M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z","spark":"M12,1L9,9L1,12L9,15L12,23L15,15L23,12L15,9L12,1Z","plus":"M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z","home":"M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z","analysis":"M3 12a2 2 0 0 1 4 0v6a2 2 0 0 1-4 0zM10 6a2 2 0 0 1 4 0v12a2 2 0 0 1-4 0zM17 10a2 2 0 0 1 4 0v8a2 2 0 0 1-4 0z","backup":"M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z","dots":"M16 12a2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2 2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2z"};
+const I=(n,c,s=24)=>`<svg class="gl" viewBox="0 0 24 24" style="width:${s/10}rem;height:${s/10}rem" fill="${c||'currentColor'}"><path d="${P[n]}"/></svg>`;
+const AI=a=>I(a.type==='cash'?'cash':a.type==='credit'?'card':'bank',a.type==='cash'?'#4caf50':a.type==='credit'?'#b388ff':'#1fb6d0');
+const AM=a=>I(a.type==='cash'?'cash':a.type==='credit'?'card':'bank','var(--mu)',13);
+const oth=t=>(S.cat.find(c=>c.type===t&&c.name==='Others')||S.cat.find(c=>c.type===t)||{}).id;
+const ev=s=>{s=String(s).replace(/,/g,'').replace(/×/g,'*');if(!/^[\d+\-*/().\s]+$/.test(s))return NaN;try{return Function('"use strict";return('+s+')')()}catch(e){return NaN}};
+function addTag(g){const t=g.trim().replace(/^#/,'');if(t&&!D.tags.includes(t))D.tags.push(t)}
+function sync(){const v=i=>$(i)?$(i).value:undefined;if(v('#amt')!==undefined)D.amt=v('#amt');if($('#ttl'))D.title=v('#ttl');if(v('#dd'))D.ts=+new Date(v('#dd')+'T'+(v('#dt')||'00:00'));if(v('#tg'))addTag(v('#tg'))}
+function openAdd(id){const t=id&&S.tx.find(x=>x.id===id);PV=V==='add'?PV:V;D=t?{...t,img:t.img?(IMG[t.id]||null):null,amt:String(t.amt),title:t.title||'',tags:[...(t.tags||[])],er:''}:{type:'expense',amt:'',title:'',tags:[],cat:oth('expense'),acc:S.acc[0].id,to:(S.acc[1]||S.acc[0]).id,ts:Date.now(),er:''};V='add';window.scrollTo(0,0);render();if(!t)setTimeout(()=>{const i=document.getElementById('amt');i&&i.focus()},60)}
+function addv(){const tr=D.type==='transfer',c=cat(D.cat),a=acc(D.acc)||S.acc[0],b=acc(D.to)||S.acc[0],d=new Date(D.ts);
+const fr=(k,ic,l,v)=>`<div class="fr" data-a="${k}"><span class="fi">${ic}</span><div class="g"><small>${l}</small><b>${v}</b></div>${I('ch','var(--mu)',22)}</div>`;
+const sug=[...new Set([...S.tx.flatMap(t=>t.tags||[]).reverse(),'deposit','vacation','amazon'])].filter(x=>!D.tags.includes(x)).slice(0,6);
+return`<div class="adx"><div class="top hd ad"><button class="ib sb" data-a="back" aria-label="Back">${I('bk')}</button><h1 class="ph">${D.id?'Edit':'Add'} transaction</h1></div>
+<div class="qa" data-a="quick"><span style="color:#a78bfa">${I('bolt','#a78bfa',20)}</span><div class="g"><b>Quick add</b><small>Type a sentence and the form fills itself.</small></div>${I('ch','#a78bfa',16)}</div>
+<div class="seg">${['expense','income','transfer'].map(k=>`<button class="${D.type===k?'on':''}" data-a="tt" data-v="${k}">${cap(k)}</button>`).join('')}</div>
+<div class="dr"><label><span class="fi">${I('cal','#a8bdc8',20)}</span>${d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}<input id="dd" type="date" value="${loc(D.ts).slice(0,10)}"></label><label><span class="fi">${I('clk','#a8bdc8',20)}</span>${tms(D.ts)}<input id="dt" type="time" value="${loc(D.ts).slice(11)}"></label></div>
+<div class="am"><span class="fi rp">${sym()}</span><div class="g"><small class="mu">Amount</small><input id="amt" inputmode="decimal" placeholder="0" value="${esc(D.amt)}"></div><button class="cb" data-a="calc" aria-label="Calculator">${I('calc')}</button></div>
+${tr?fr('pacc',AI(a),'From',esc(a.name))+fr('pto',AI(b),'To',esc(b.name)):fr('pcat','<span style="color:'+c.color+'">'+ci(c,30)+'</span>','Category',esc(c.name))+fr('pacc',AI(a),'Payment mode',esc(a.name))}
+${tr?'':chips()}<div class="err">${D.er||''}</div><div class="oh">Other details</div>
+<div class="nt"><span class="fi">${I('note','#a8bdc8',19)}</span><input id="ttl" placeholder="Write a note" value="${esc(D.title)}"></div>
+<div class="nt"><span class="fi">${I('hash','#a8bdc8',18)}</span><input id="tg" placeholder="Add tags"><button class="mu" data-a="thelp" aria-label="About tags">${I('help')}</button></div>
+<div class="tg">${D.tags.map(x=>`<button data-a="tag" data-v="${esc(x)}" style="background:var(--ac);color:#fff">#${esc(x)}</button>`).join('')}${sug.map(x=>`<button data-a="tag" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+<div class="fr" data-a="att"><span class="fi">${I('clip','#a8bdc8',20)}</span><div class="g"><b style="font-weight:500">${D.img?'Change attachment':'Add attachment'}</b></div>${I('ch','var(--mu)',22)}</div>${D.img?`<img src="${D.img}" data-a="rmimg" alt="Attachment. Tap to remove" style="width:12rem;border-radius:1.4rem;margin:0.6rem 0 0.6rem 4.6rem;display:block">`:''}
+<input type="file" id="fl" accept="image/*" hidden>${D.id?'<button class="btn del" data-a="td">Delete transaction</button>':''}<button class="sv" data-a="ts" aria-label="Save">${I('save','currentColor',24)}</button></div>`}
+function pickCat(){sync();const ls=S.cat.filter(c=>c.type===D.type),pb=(k,i)=>`<button class="${pv===k?'on':''}" data-a="pv" data-v="${k}">${I(i,'currentColor',18)}</button>`;
+sheet(`<div class="sth"><b>Select Category</b><div class="seg vt">${pb('grid','grid')}${pb('list','list')}</div><button class="ib" data-a="gocat" aria-label="Edit categories">${I('pen')}</button><button class="ib" data-a="close" aria-label="Close">${I('x')}</button></div>
+${pv==='grid'?`<div class="pk">${ls.map(c=>`<button data-a="sc" data-v="${c.id}"><i class="${D.cat===c.id?'sel':''}" style="--c:${c.color}">${ci(c,27.3)}</i>${esc(c.name)}</button>`).join('')}</div>`:ls.map(c=>`<button class="rd ${D.cat===c.id?'on':''}" data-a="sc" data-v="${c.id}"><s></s><span class="gi" style="--c:${c.color}">${ci(c,26)}</span>${esc(c.name)}</button>`).join('')}`)}
+function pickAcc(){sync();const g=(t,n)=>{const l=S.acc.filter(a=>a.type===t);return l.length?`<div class="sp" style="margin-top:2rem;font-size:1.9rem;font-weight:600;color:var(--mu)"><span style="display:flex;gap:1rem;align-items:center">${AI({type:t})}${n}</span>${t==='bank'?`<span class="sm" style="display:flex;gap:1rem;align-items:center;font-weight:400">Show balance <button class="sw ${S.hide?'':'on'}" data-a="hide2" aria-label="Show balance"></button></span>`:''}</div>`+l.map(a=>`<button class="rd ${D[PT]===a.id?'on':''}" data-a="sa" data-v="${a.id}"><s></s><span style="flex:1">${esc(a.name)}</span><span class="mu">${m(bal(a))}</span></button>`).join(''):''};
+sheet(`<div class="sth"><b>Select Payment Mode</b><button class="ib" data-a="goacc" aria-label="Edit accounts">${I('pen')}</button><button class="ib" data-a="close" aria-label="Close">${I('x')}</button></div>${g('bank','Bank Accounts')}${g('cash','Cash')}${g('credit','Credit')}`)}
+function pickImg(f){const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,720/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);D.img=c.toDataURL('image/jpeg',.6);render()};i.src=r.result};r.readAsDataURL(f)}
+function entSheet(k,id,er){const o=k==='acc'?acc(id):cat(id),n=!id;E={k,id,...(n?{name:'',v:'star',t:k==='acc'?'bank':ct,i:'star'}:{name:o.name,v:k==='acc'?o.open:o.icon,t:o.type,i:o.icon})};
+sheet(`${head((n?'Add ':'Edit ')+(k==='acc'?'account':'category'))}<label>Name</label><input id="en" value="${esc(E.name)}">${k==='acc'?`<label>Type</label><select id="et">${['bank','cash','credit'].map(t=>`<option value="${t}"${E.t===t?' selected':''}>${cap(t)}</option>`).join('')}</select><label>${E.t==='credit'?'Credit limit':'Opening balance'}</label><input id="ev" inputmode="decimal" value="${E.v||''}" placeholder="0"><div class="two"><div><label>Statement day (credit, 1-28)</label><input id="es2" inputmode="numeric" value="${(acc(E.id)||{}).stmt||''}"></div><div><label>Due day (credit, 1-28)</label><input id="ed2" inputmode="numeric" value="${(acc(E.id)||{}).due||''}"></div></div>`:`<label>Icon</label><div class="pk ipk">${PICK.map(k=>`<button data-a="pi" data-v="${k}" aria-label="${k}"><i class="${E.v===k?'sel':''}" style="--c:${COL[k]}">${gi(k,28)}</i></button>`).join('')}</div>${E.t==='expense'?`<label>Monthly budget (optional)</label><input id="eb" inputmode="decimal" value="${S.bud[E.id]||''}" placeholder="No limit">`:''}`}<div class="err">${er||''}</div><button class="btn" data-a="es">Save</button>${E.k==='acc'&&E.id&&E.t==='credit'?`<button class="btn" data-a="pay" data-id="${E.id}">Pay bill</button>`:''}${n?'':'<button class="btn del" data-a="ed">Delete</button>'}`)}
+let F={};const IMG={};let DB;
+const idb=f=>new Promise(r=>{try{if(DB)return r(f(DB));const o=indexedDB.open('penny',1);o.onupgradeneeded=()=>o.result.createObjectStore('i');o.onsuccess=()=>{DB=o.result;r(f(DB))};o.onerror=()=>r()}catch(e){r()}});
+const iput=(k,v)=>idb(d=>{d.transaction('i','readwrite').objectStore('i').put(v,k)}),idel=k=>idb(d=>{d.transaction('i','readwrite').objectStore('i').delete(k)});
+const iall=()=>idb(d=>new Promise(r=>{const o={},c=d.transaction('i').objectStore('i').openCursor();c.onsuccess=()=>{const x=c.result;if(x){o[x.key]=x.value;x.continue()}else r(o)};c.onerror=()=>r(o)}));
+function delTx(id){const t=S.tx.find(x=>x.id===id);if(!t)return;vib(20);S.tx=S.tx.filter(x=>x.id!==id);save();toast('Transaction deleted',()=>{S.tx.push(t);save();render()});setTimeout(()=>{if(!S.tx.some(x=>x.id===id)){idel(id);delete IMG[id]}},6e3)}
+let sx,sy,st;document.addEventListener('touchstart',e=>{st=e.target.closest('.tr[data-a="edit"]');sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchmove',e=>{if(!st)return;const dx=e.touches[0].clientX-sx,dy=e.touches[0].clientY-sy;if(dx<-12&&Math.abs(dy)<Math.abs(dx)){const w=Math.min(-dx,140);st.style.background=`linear-gradient(to left,${w>90?'#ef4444':'#ff6b6b99'} ${w}px,transparent ${w}px)`}},{passive:true});
+document.addEventListener('touchend',e=>{if(!st)return;st.style.background='';const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy,id=st.dataset.id;st=null;if(dx<-90&&Math.abs(dy)<40){window.__sw=1;setTimeout(()=>window.__sw=0,400);delTx(id);render()}},{passive:true});
+const fOk=t=>(!F.from||t.ts>=F.from)&&(!F.to||t.ts<F.to)&&(!F.min||t.amt>=F.min)&&(!F.max||t.amt<=F.max)&&(!F.acc||t.acc===F.acc||t.to===F.acc)&&(!F.tag||(t.tags||[]).includes(F.tag));
+const bar=(p,c)=>`<div style="height:.8rem;border-radius:9.9rem;background:var(--c2);margin-top:.8rem;overflow:hidden"><div style="height:100%;width:${Math.min(100,Math.max(0,p))}%;background:${c}"></div></div>`;
+const nd=day=>{const n=new Date(),d=new Date(n.getFullYear(),n.getMonth(),day);if(d<new Date(n.getFullYear(),n.getMonth(),n.getDate()))d.setMonth(d.getMonth()+1);return d};
+const adv=(t,f)=>{const d=new Date(t);f==='weekly'?d.setDate(d.getDate()+7):f==='yearly'?d.setFullYear(d.getFullYear()+1):d.setMonth(d.getMonth()+1);return +d};
+function runRec(){let ch=0;const now=Date.now();for(const r of S.rec){if(!acc(r.acc))continue;let g=0;while(r.next<=now&&g++<400){S.tx.push({id:uid(),type:r.type,amt:r.amt,title:r.title,cat:r.cat,acc:r.acc,to:null,ts:r.next,tags:['recurring'],img:null});r.next=adv(r.next,r.freq);ch=1}}if(ch)save()}
+function homeX(top){let h='';const[a,b]=range('month',0),ex=inR(a,b).filter(t=>t.type==='expense'),
+bl=Object.entries(S.bud).filter(([id])=>S.cat.some(c=>c.id===id)).map(([id,v])=>({c:cat(id),v,s:sum(ex.filter(t=>t.cat===id))})).sort((x,y)=>y.s/y.v-x.s/x.v).slice(0,4),
+cr=S.acc.filter(x=>x.type==='credit'&&x.due).map(x=>({x,d:Math.round((nd(x.due)-new Date().setHours(0,0,0,0))/864e5),u:Math.max(0,x.open-bal(x))})).filter(z=>z.d<=7&&z.u>0),
+rc=S.rec.filter(r=>acc(r.acc)&&r.next-Date.now()<7*864e5).slice(0,3),ln=S.loans.filter(x=>!x.paid&&x.due&&x.due-Date.now()<7*864e5);
+if(top&&(cr.length||rc.length||ln.length))h+=`<h2>Coming up</h2><div class="cd">${cr.map(z=>`<div class="sp sm" data-a="eacc" data-id="${z.x.id}" style="padding:.5rem 0;cursor:pointer"><span>${esc(z.x.name)} bill due ${z.d<=0?'today':'in '+z.d+' day'+(z.d>1?'s':'')}</span><b>${m(z.u)}</b></div>`).join('')}${rc.map(r=>`<div class="sp sm" style="padding:.5rem 0"><span>${esc(r.title||cat(r.cat).name)} · ${dts(r.next)}</span><b>${m(r.amt)}</b></div>`).join('')}${ln.map(x=>`<div class="sp sm" data-a="nav" data-v="loans" style="padding:.5rem 0;cursor:pointer"><span>${x.dir==='borrowed'?'Pay '+esc(x.who):esc(x.who)+(x.dir==='expected'?' · expected':' to pay you')} · ${x.due<Date.now()?'overdue':dts(x.due)}</span><b class="${x.dir==='borrowed'?'ex':'pos'}">${m(x.amt)}</b></div>`).join('')}</div>`;
+const ex2=sum(S.loans.filter(x=>!x.paid&&x.dir!=='borrowed'));if(top&&ex2>0)h+=`<p class="mu sm" style="margin:1.2rem 0 0">Expecting ${m(ex2)} · balance would be ${m(sum(S.acc.filter(a=>a.type!=='credit').map(a=>({amt:bal(a)})))+ex2)}</p>`;
+const al=bl.some(x=>x.s>=x.v*.8);if(bl.length&&al===!!top)h+=`<h2>Budgets this month</h2><div class="cd"${al?' style="border:.1rem solid var(--ex)"':''}>${bl.map(x=>`<div style="margin-bottom:1.2rem"><div class="sp sm"><b>${esc(x.c.name)}</b><span class="${x.s>x.v?'ex':'mu'}">${m(x.s)} / ${m(x.v)}</span></div>${bar(x.s/x.v*100,x.s>x.v?'var(--ex)':x.s>x.v*.8?'#fbbf24':'var(--in)')}${fcLine(x)}</div>`).join('')}</div>`;
+return h}
+function anaX(a,b,sp,ic,ex){const[pa,pb]=range(am,ao-1),pl=inR(pa,pb),ps=sum(pl.filter(t=>t.type==='expense')),pi=sum(pl.filter(t=>t.type==='income')),
+dl=(n,o,bad)=>o?`<span class="${(n>o)===bad?'ex':'in'}">${n>=o?'▲':'▼'} ${Math.round(Math.abs(n-o)/o*100)}%</span>`:'–';
+let h=(am==='month'&&ao===0?`<h2>Month-end forecast</h2><div class="cd"><div class="sp"><span>Spending at this pace</span><b>${m(fcast(sp))}</b></div></div>`:'')+`<h2>Compared with previous ${am}</h2><div class="cd"><div class="sp"><span>Spending</span><b>${dl(sp,ps,true)}</b></div><div class="sp" style="margin-top:1rem"><span>Income</span><b>${dl(ic,pi,false)}</b></div></div>`;
+const P=[];for(let i=-5;i<=0;i++){const[x,y,xd]=range(am,ao+i),l=inR(x,y);P.push({l:am==='month'?xd.toLocaleDateString('en-GB',{month:'short'}):am==='year'?''+xd.getFullYear():dts(x),s:sum(l.filter(t=>t.type==='expense')),i:sum(l.filter(t=>t.type==='income'))})}
+const mx=Math.max(1,...P.map(p=>Math.max(p.s,p.i)));
+h+=`<h2>Last 6 ${am}s</h2><div class="cd"><svg viewBox="0 0 300 125" style="width:100%">${P.map((p,k)=>`<g data-a="bar" data-t="${esc(p.l)}: ${m(p.s)} spent · ${m(p.i)} income" style="cursor:pointer"><rect x="${k*50}" y="0" width="50" height="125" fill="transparent"/><rect x="${k*50+6}" y="${100-p.s/mx*90}" width="17" height="${p.s/mx*90}" rx="3" fill="var(--ex)"/><rect x="${k*50+25}" y="${100-p.i/mx*90}" width="17" height="${p.i/mx*90}" rx="3" fill="var(--in)"/><text x="${k*50+24}" y="118" text-anchor="middle" font-size="10" fill="var(--mu)">${esc(p.l)}</text></g>`).join('')}</svg><div class="sm mu" style="text-align:center">Red: spending · Green: income · Tap a bar for amounts</div></div>`;
+const grp=k=>{const o={};ex.forEach(t=>k(t).forEach(x=>o[x]=(o[x]||0)+t.amt));return Object.entries(o).sort((x,y)=>y[1]-x[1]).slice(0,5)},
+li=r=>r.map(([k,v,q])=>`<div class="tr" data-a="drill" data-q="${esc(q||k)}" data-f="${a}" data-e="${b}"><div class="g"><b>${esc(k)}</b></div><div class="r"><b>${m(v)}</b></div></div>`).join(''),
+tg=grp(t=>t.tags||[]).map(([k,v])=>['#'+k,v,k]),nt=grp(t=>t.title?[t.title.trim()]:[]);
+if(tg.length)h+=`<h2>Top tags</h2><div class="cd">${li(tg)}</div>`;if(nt.length)h+=`<h2>Top spending notes</h2><div class="cd">${li(nt)}</div>`;return h}
+function fsheet(){sheet(`${head('Filters')}<div class="two"><div><label>From</label><input id="ff" type="date" value="${F.from?loc(F.from).slice(0,10):''}"></div><div><label>To</label><input id="ft" type="date" value="${F.to?loc(F.to-864e5).slice(0,10):''}"></div></div><div class="two"><div><label>Min amount</label><input id="fa" inputmode="decimal" value="${F.min||''}"></div><div><label>Max amount</label><input id="fb" inputmode="decimal" value="${F.max||''}"></div></div><label>Account</label><select id="fc"><option value="">All accounts</option>${opts(F.acc)}</select><label>Tag</label><input id="fg" value="${esc(F.tag||'')}" placeholder="e.g. vacation"><button class="btn" data-a="fgo">Apply</button><button class="btn del" data-a="fclr">Clear filters</button>`)}
+function reasg(id){const c=cat(id),n=S.tx.filter(t=>t.cat===id).length;sheet(`${head('Move transactions')}<p class="mu">${n} transaction${n>1?'s':''} use “${esc(c.name)}”. Move them to:</p><select id="rt">${S.cat.filter(x=>x.type===c.type&&x.id!==id).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')}</select><button class="btn del" data-a="rg" data-id="${id}">Move and delete category</button>`)}
+const hdr=(t,b)=>`<div class="top"><button class="ib" data-a="nav" data-v="more" aria-label="Back">${I('bk')}</button><h1 style="flex:1">${t}</h1><button class="pill" data-a="${b}">${I('plus','currentColor',18)}Add</button></div>`;
+function recv(){return hdr('Recurring','erec')+`<p class="mu sm">Posts automatically on its date, tagged #recurring.</p><div class="cd ls">${S.rec.length?S.rec.map(r=>{const c=cat(r.cat);return`<div class="tr" data-a="erec" data-id="${r.id}"><i style="--c:${c.color};background:${c.color}33">${ci(c,21)}</i><div class="g"><b>${esc(r.title||c.name)}</b><small>${cap(r.freq)} · next ${dts(r.next)}</small></div><div class="r"><b class="${r.type==='income'?'pos':''}">${m(r.amt)}</b></div></div>`}).join(''):'<div class="em">No recurring items yet.<br><br><button class="pill" data-a="erec">Add your first one</button></div>'}</div>`}
+function erec(id){const r=S.rec.find(x=>x.id===id)||{amt:'',title:'',cat:oth('expense'),acc:S.acc[0].id,freq:'monthly',next:Date.now()};
+sheet(`${head(id?'Edit recurring':'Add recurring')}<label>Amount</label><input id="ra" inputmode="decimal" value="${r.amt}"><label>Note</label><input id="rn" value="${esc(r.title)}"><label>Category</label><select id="rc">${['expense','income'].map(k=>`<optgroup label="${cap(k)}">${S.cat.filter(c=>c.type===k).map(c=>`<option value="${c.id}"${c.id===r.cat?' selected':''}>${esc(c.name)}</option>`).join('')}</optgroup>`).join('')}</select><label>Account</label><select id="rac">${opts(r.acc)}</select><div class="two"><div><label>Repeats</label><select id="rf">${['weekly','monthly','yearly'].map(k=>`<option value="${k}"${r.freq===k?' selected':''}>${cap(k)}</option>`).join('')}</select></div><div><label>Next date</label><input id="rd" type="date" value="${loc(r.next).slice(0,10)}"></div></div><div class="err" id="re"></div><button class="btn" data-a="rs" data-id="${id||''}">Save</button>${id?`<button class="btn del" data-a="rdl" data-id="${id}">Delete</button>`:''}`)}
+function loanv(){const L=S.loans,o=L.filter(x=>!x.paid),g=sum(o.filter(x=>x.dir!=='borrowed')),w=sum(o.filter(x=>x.dir==='borrowed'));
+return hdr('Loans &amp; IOUs','eloan')+`<div class="gr sg" style="margin-top:1.4rem"><div class="cd"><div class="mu">You'll get</div><div class="amt in">${m(g)}</div></div><div class="cd"><div class="mu">You owe</div><div class="amt ex">${m(w)}</div></div></div><div class="cd ls" style="margin-top:1.4rem">${L.length?[...L].sort((x,y)=>x.paid-y.paid||y.ts-x.ts).map(x=>`<div class="tr" data-a="eloan" data-id="${x.id}" style="${x.paid?'opacity:.5':''}"><div class="g"><b>${esc(x.who)}</b><small>${{lent:'Owes you',expected:'Expected',borrowed:'You owe'}[x.dir]||'Expected'}${x.due?' · '+(!x.paid&&x.due<Date.now()?'<span class="ex">overdue since '+dts(x.due)+'</span>':'due '+dts(x.due)):''}${x.note?' · '+esc(x.note):''}${x.paid?' · '+(x.dir==='borrowed'?'paid':'received'):''}</small></div><div class="r"><b class="${x.dir!=='borrowed'?'pos':'ex'}">${m(x.amt)}</b><small>${dts(x.ts)}</small></div></div>`).join(''):'<div class="em">Nothing here yet.<br><br><button class="pill" data-a="eloan">Add your first entry</button></div>'}</div>`}
+function eloan(id){const x=S.loans.find(l=>l.id===id)||{who:'',amt:'',dir:'lent',note:''};sheet(`${head(id?'Edit entry':'Add entry')}<label>Person</label><input id="lw" value="${esc(x.who)}"><label>Amount</label><input id="la" inputmode="decimal" value="${x.amt}"><label>Type</label><select id="ld"><option value="lent"${x.dir==='lent'?' selected':''}>I lent (they owe me)</option><option value="borrowed"${x.dir==='borrowed'?' selected':''}>I borrowed (I owe them)</option><option value="expected"${x.dir==='expected'?' selected':''}>Expecting money (refund, salary…)</option></select><label>Note</label><input id="ln" value="${esc(x.note)}"><label>Expected / due date (optional)</label><input id="lde" type="date" value="${x.due?loc(x.due).slice(0,10):''}"><label>Account (used when marked received / paid)</label><select id="lac">${opts(S.acc[0].id)}</select><div class="err" id="le"></div><button class="btn" data-a="ls" data-id="${id||''}">Save</button>${id&&!x.paid?`<button class="btn" data-a="lrc" data-id="${id}">${x.dir==='borrowed'?'Mark as paid (adds an expense)':'Mark as received (adds income)'}</button>`:''}${id?`<button class="btn" data-a="lp" data-id="${id}">${x.paid?'Mark as unsettled':'Mark as settled'}</button><button class="btn del" data-a="lx" data-id="${id}">Delete</button>`:''}`)}
+function goalv(){return hdr('Savings goals','egoal')+(S.goals.length?S.goals.map(x=>`<div class="cd" data-a="egoal" data-id="${x.id}" style="margin-top:1.2rem;cursor:pointer"><div class="sp"><b>${esc(x.name)}</b><span>${Math.round(x.saved/x.target*100)}%</span></div><div class="mu sm">${m(x.saved)} of ${m(x.target)}</div>${bar(x.saved/x.target*100,'var(--in)')}</div>`).join(''):'<div class="em">No goals yet.<br><br><button class="pill" data-a="egoal">Add your first goal</button></div>')}
+function egoal(id){const x=S.goals.find(g=>g.id===id)||{name:'',target:'',saved:''};sheet(`${head(id?'Edit goal':'Add goal')}<label>Goal</label><input id="gn" value="${esc(x.name)}" placeholder="e.g. New phone"><label>Target amount</label><input id="gt" inputmode="decimal" value="${x.target}"><label>Saved so far</label><input id="gv" inputmode="decimal" value="${x.saved}"><div class="err" id="ge"></div><button class="btn" data-a="gs" data-id="${id||''}">Save</button>${id?`<button class="btn del" data-a="gx" data-id="${id}">Delete</button>`:''}`)}
+function importBk(f){f.text().then(t=>{const x=JSON.parse(t),d=x.S||x;if(!d.tx||!d.acc||!d.cat)throw 0;S=d;norm();save();if(x.img){Object.assign(IMG,x.img);for(const k in x.img)iput(k,x.img[k])}sheet();render();toast('Backup restored')}).catch(()=>toast('That is not a valid backup file'))}
+let XL;const loadXl=()=>window.XLSX?Promise.resolve():XL||(XL=new Promise((ok,no)=>{const e=document.createElement('script');e.src='vendor/xlsx.full.min.js';e.onload=ok;e.onerror=()=>{XL=null;no(new Error('Excel library did not load'))};document.head.appendChild(e)}));
+async function importXl(f){try{await loadXl();const wb=XLSX.read(await f.arrayBuffer()),ws=wb.Sheets.Transactions||wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1}).slice(1);let n=0;
+const gA=nm=>{const k=String(nm||'').trim();let a=S.acc.find(x=>x.name.toLowerCase()===k.toLowerCase());if(!a){a={id:uid(),name:k||'Imported',type:'bank',open:0};S.acc.push(a)}return a};
+for(const[dt,ty,ct,ac,to,am,nt,tg]of rows){const y=String(ty||'').toLowerCase(),amt=+am;if(!['expense','income','transfer'].includes(y)||!(amt>0))continue;let ts;
+if(typeof dt==='number'){const d=new Date((dt-25569)*864e5);ts=+new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),d.getUTCHours(),d.getUTCMinutes(),d.getUTCSeconds())}else ts=Date.parse(dt);if(!ts)continue;
+const A=gA(ac),B=y==='transfer'?gA(to):null,c=y==='transfer'?null:(S.cat.find(x=>x.type===y&&x.name.toLowerCase()===String(ct||'').trim().toLowerCase())||{id:oth(y)}).id;
+if(S.tx.some(x=>x.ts===ts&&x.amt===amt&&x.acc===A.id&&x.type===y))continue;
+S.tx.push({id:uid(),type:y,amt,title:String(nt||''),cat:c,acc:A.id,to:B?B.id:null,ts,tags:String(tg||'').split(',').map(z=>z.trim()).filter(Boolean),img:null});n++}
+save();render();toast(n+' transactions imported')}catch(e){toast('Could not read that file')}}
+const LN=()=>{const C=window.Capacitor;return C&&C.Plugins&&C.Plugins.LocalNotifications};
+async function schedNotif(){const L=LN();if(!L||!S.nt.on)return;try{
+const p=await L.getPending();if(p.notifications&&p.notifications.length)await L.cancel({notifications:p.notifications});
+const out=[];let id=10;const at=(d,h=9)=>{const x=new Date(d);x.setHours(h,0,0,0);return x},add=(t,b,w)=>{if(w>Date.now()&&out.length<60)out.push({id:id++,title:t,body:b,schedule:{at:w,allowWhileIdle:true}})};
+for(const a of S.acc){if(a.type!=='credit'||!a.due)continue;const u=Math.max(0,a.open-bal(a));if(!(u>0))continue;const d=nd(a.due),n=new Date(d.getFullYear(),d.getMonth()+1,d.getDate());
+add(a.name+' bill due tomorrow',m(u)+' is outstanding',at(d-864e5));add(a.name+' bill due today',m(u)+' is outstanding',at(d));add(a.name+' bill due tomorrow','Time to pay your card bill',at(n-864e5));add(a.name+' bill due today','Time to pay your card bill',at(n))}
+for(const r of S.rec)if(acc(r.acc))add('Recurring: '+(r.title||cat(r.cat).name),m(r.amt)+' is due today',at(r.next));
+for(const x of S.loans){if(x.paid||!x.due)continue;add(x.dir==='borrowed'?'Pay '+x.who:x.who+(x.dir==='expected'?' · expected money':' should pay you'),m(x.amt)+' is due today',at(x.due))}
+if(S.nt.daily)out.push({id:1,title:'Penny',body:'Anything to log today?',schedule:{on:{hour:21,minute:0},allowWhileIdle:true}});
+if(out.length)await L.schedule({notifications:out})}catch(e){}}
+async function ntToggle(){const L=LN();if(!S.nt.on){if(L){try{const r=await L.requestPermissions();if(r.display!=='granted'){toast('Notification permission was denied');return}}catch(e){}}S.nt.on=1;save();render();schedNotif();toast(L?'Notifications on':'Turned on. Budget alerts show inside the app')}
+else{S.nt.on=0;S.nt.daily=0;save();render();if(L)try{const p=await L.getPending();if(p.notifications.length)await L.cancel({notifications:p.notifications})}catch(e){}}}
+function budgetCheck(t){if(!t||t.type!=='expense'||!S.bud[t.cat])return;const[a,b]=range('month',0),sp=sum(inR(a,b).filter(x=>x.type==='expense'&&x.cat===t.cat)),r=sp/S.bud[t.cat],lv=r>=1?100:r>=.8?80:0,k=t.cat+'-'+a;if(lv<=(S.nt.al[k]||0))return;S.nt.al[k]=lv;save();
+const c=cat(t.cat),msg=lv===100?`${c.name} budget exceeded: ${m(sp)} of ${m(S.bud[t.cat])}`:`${c.name} budget at ${Math.round(r*100)}%: ${m(sp)} of ${m(S.bud[t.cat])}`,L=LN();
+if(S.nt.on&&L)L.schedule({notifications:[{id:Date.now()%2e9,title:'Budget alert',body:msg,schedule:{at:new Date(Date.now()+1500)}}]}).catch(()=>{});else toast(msg)}
+const ntUI=()=>`<div class="cd" style="margin-top:1.6rem"><div class="sp"><b>Notifications</b><button class="pill" data-a="ntg">${S.nt.on?'On':'Off'}</button></div><p class="mu sm">Card bills, due dates, recurring items and budget alerts.</p>${S.nt.on?`<div class="sp" style="margin-top:1rem"><span>Daily reminder · 9 PM</span><button class="pill" data-a="ntd">${S.nt.daily?'On':'Off'}</button></div>`:''}${LN()?'':'<p class="mu sm" style="margin-top:1rem">Alerts outside the app need the Local Notifications plugin in the app build. Budget alerts still show inside the app.</p>'}</div>`;
+const MV=['cats','rec','loans','goals','nw','yr','tpls'];let Y=new Date().getFullYear();
+const fcast=x=>{const n=new Date();return x/n.getDate()*new Date(n.getFullYear(),n.getMonth()+1,0).getDate()};
+const fcLine=x=>{if(new Date().getDate()<3)return'';const p=fcast(x.s);return`<div class="sm" style="margin-top:.5rem;color:${p>x.v?'var(--ex)':'var(--mu)'}">On pace for ${m(p)} this month</div>`};
+const abUI=()=>`<div class="cd" style="margin-top:1.2rem"><div class="sp"><b>Auto-backup</b><button class="pill" data-a="abg">${S.ab.on?'On':'Off'}</button></div><p class="mu sm">A weekly copy goes to Documents/Penny when you open the app. The last 4 are kept. App only.</p></div>`;
+async function autoBackup(){if(!S.ab.on)return;const C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return;const Fs=C.Plugins.Filesystem;if(!Fs||Date.now()-(S.lastBk||0)<7*864e5)return;
+try{await Fs.writeFile({path:'Penny/penny-backup-'+new Date().toISOString().slice(0,10)+'.json',data:JSON.stringify({S,img:IMG}),directory:'DOCUMENTS',encoding:'utf8',recursive:true});S.lastBk=Date.now();save();
+const r=await Fs.readdir({path:'Penny',directory:'DOCUMENTS'}),f=r.files.map(x=>x.name||x).filter(n=>/^penny-backup-/.test(n)).sort();for(const n of f.slice(0,Math.max(0,f.length-4)))await Fs.deleteFile({path:'Penny/'+n,directory:'DOCUMENTS'});toast('Auto-backup saved to Documents/Penny')}catch(e){toast('Auto-backup failed. Check storage permission')}}
+const bk2=h=>`<div class="top"><button class="ib" data-a="nav" data-v="more" aria-label="Back">${I('bk')}</button><h1 style="flex:1">${h}</h1></div>`;
+function tplv(){return bk2('Templates')+`<p class="mu sm">Save one with the ☆ chip on the Add screen. Tap a row here to delete it.</p><div class="cd ls">${S.tpl.length?S.tpl.map(x=>{const c=cat(x.cat);return`<div class="tr" data-a="tdel" data-id="${x.id}"><i style="--c:${c.color};background:${c.color}33">${ci(c,21)}</i><div class="g"><b>${esc(x.name)}</b><small>${esc(c.name)} · ${esc((acc(x.acc)||{}).name||'')}</small></div><div class="r"><b>${m(x.amt)}</b></div></div>`}).join(''):'<div class="em">No templates yet.</div>'}</div>`}
+function nwv(){const na=S.acc.filter(a=>a.type!=='credit'),cr=S.acc.filter(a=>a.type==='credit'),A=sum(na.map(a=>({amt:bal(a)}))),Lb=sum(cr.map(a=>({amt:a.open-bal(a)}))),o=S.loans.filter(x=>!x.paid),rc=sum(o.filter(x=>x.dir!=='borrowed')),ow=sum(o.filter(x=>x.dir==='borrowed')),nw=A-Lb,n=new Date(),P=[];
+for(let i=-11;i<=0;i++){const e=+new Date(n.getFullYear(),n.getMonth()+i+1,1),adj=S.tx.filter(t=>t.ts>=e).reduce((z,t)=>z+(t.type==='income'?t.amt:t.type==='expense'?-t.amt:0),0);P.push(nw-adj)}
+const lo=Math.min(...P),hi=Math.max(...P),pt=P.map((v,k)=>`${k*27+6},${100-(hi===lo?.5:(v-lo)/(hi-lo))*85}`).join(' '),ch=nw-P[10],row=(l,v,c)=>`<div class="sp" style="padding:.7rem 0"><span>${l}</span><b class="${c||''}">${m(v)}</b></div>`;
+return bk2('Net worth')+`<div class="cd" style="margin-top:1.4rem"><div class="mu">Net worth</div><div class="amt ${nw<0?'ex':''}">${m(nw)}</div><div class="sm ${ch>=0?'in':'ex'}">${ch>=0?'▲':'▼'} ${m(Math.abs(ch))} vs last month</div><svg viewBox="0 0 310 112" style="width:100%;margin-top:1rem"><polyline points="${pt}" fill="none" stroke="var(--in)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/></svg><div class="sm mu" style="text-align:center">Last 12 months, from your transactions</div></div><h2>Breakdown</h2><div class="cd">${row('Money in accounts',A)}${row('Credit card dues',-Lb,Lb?'ex':'')}${row('Money you will get',rc,'pos')}${row('Money you owe',-ow,ow?'ex':'')}<div class="sp" style="padding:.9rem 0 0;border-top:.1rem solid var(--c2);margin-top:.5rem"><b>With expected and dues</b><b>${m(nw+rc-ow)}</b></div></div>`}
+function yrv(){const a=+new Date(Y,0,1),b=+new Date(Y+1,0,1),l=S.tx.filter(t=>t.ts>=a&&t.ts<b),ex=l.filter(t=>t.type==='expense'),si=sum(l.filter(t=>t.type==='income')),se=sum(ex),
+M=[...Array(12)].map((_,i)=>{const x=l.filter(t=>new Date(t.ts).getMonth()===i);return{i:sum(x.filter(t=>t.type==='income')),s:sum(x.filter(t=>t.type==='expense'))}}),mx=Math.max(1,...M.map(z=>Math.max(z.i,z.s))),cc={};
+ex.forEach(t=>cc[t.cat]=(cc[t.cat]||0)+t.amt);const top=Object.entries(cc).sort((x,y)=>y[1]-x[1]).slice(0,5),big=ex.slice().sort((x,y)=>y.amt-x.amt)[0],ml='JFMAMJJASOND';
+return`<div class="top"><button class="ib" data-a="nav" data-v="more" aria-label="Back">${I('bk')}</button><h1 style="flex:1">Yearly summary</h1></div><div class="sp" style="margin:1rem 0"><button class="pill" data-a="yp">‹</button><b style="font-size:1.8rem">${Y}</b><button class="pill" data-a="yn">›</button></div>
+<div class="cd"><div class="sp"><span>Income</span><b class="pos">${m(si)}</b></div><div class="sp" style="margin-top:1rem"><span>Spent</span><b class="ex">${m(se)}</b></div><div class="sp" style="margin-top:1rem"><span>Saved</span><b>${m(si-se)}${si>0?' · '+Math.round((si-se)/si*100)+'%':''}</b></div></div>
+<h2>Month by month</h2><div class="cd"><svg viewBox="0 0 300 120" style="width:100%">${M.map((z,k)=>`<g data-a="bar" data-t="${new Date(Y,k,1).toLocaleDateString('en-GB',{month:'long'})}: ${m(z.s)} spent · ${m(z.i)} income" style="cursor:pointer"><rect x="${k*25}" y="0" width="25" height="120" fill="transparent"/><rect x="${k*25+2}" y="${100-z.s/mx*90}" width="10" height="${z.s/mx*90}" rx="2" fill="var(--ex)"/><rect x="${k*25+13}" y="${100-z.i/mx*90}" width="10" height="${z.i/mx*90}" rx="2" fill="var(--in)"/><text x="${k*25+12.5}" y="114" text-anchor="middle" font-size="9" fill="var(--mu)">${ml[k]}</text></g>`).join('')}</svg><div class="sm mu" style="text-align:center">Red: spending · Green: income · Tap a bar</div></div>
+${top.length?`<h2>Top categories</h2><div class="cd">${top.map(([id,v])=>`<div class="sp" style="padding:.6rem 0"><span>${esc(cat(id).name)}</span><b>${m(v)} · ${Math.round(v/se*100)}%</b></div>`).join('')}</div>`:'<div class="em">No transactions this year.</div>'}
+${big?`<h2>Biggest expense</h2><div class="cd"><div class="sp"><span>${esc(big.title||cat(big.cat).name)} · ${dts(big.ts)}</span><b class="ex">${m(big.amt)}</b></div></div>`:''}`}
+(function(){const C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return;const P=C.Plugins;
+try{if(P.StatusBar){const dk=!matchMedia('(prefers-color-scheme:light)').matches,c=(getComputedStyle(document.body).backgroundColor.match(/\d+/g)||[14,17,20]).slice(0,3).map(v=>(+v).toString(16).padStart(2,'0')).join('');P.StatusBar.setStyle({style:dk?'DARK':'LIGHT'});P.StatusBar.setBackgroundColor({color:'#'+c})}}catch(e){}
+try{P.Network&&P.Network.addListener('networkStatusChange',x=>toast(x.connected?'Back online':'Offline. Everything still works'))}catch(e){}
+try{P.Keyboard&&P.Keyboard.addListener('keyboardDidShow',()=>{const a=document.activeElement;a&&a.scrollIntoView&&setTimeout(()=>a.scrollIntoView({block:'center',behavior:'smooth'}),80)})}catch(e){}})();
+const vib=n=>{try{const H=window.Capacitor&&Capacitor.Plugins&&Capacitor.Plugins.Haptics;if(H)H.impact({style:n>15?'MEDIUM':'LIGHT'});else navigator.vibrate&&navigator.vibrate(n)}catch(e){}};
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='amt'){e.preventDefault();const n=document.getElementById('ttl');n&&n.focus()}});
+function chips(){const n={};S.tx.forEach(t=>{if(t.type===D.type&&t.cat)n[t.cat]=(n[t.cat]||0)+1});const ls=S.cat.filter(c=>c.type===D.type).sort((x,y)=>(n[y.id]||0)-(n[x.id]||0)).slice(0,6);
+return`<div class="chp">${S.tpl.filter(x=>x.type===D.type).map(x=>`<button data-a="tpl" data-id="${x.id}">★ ${esc(x.name)}</button>`).join('')}<button data-a="tsv">☆ Save as template</button></div><div class="chp">${ls.map(c=>`<button data-a="chip" data-v="${c.id}" class="${D.cat===c.id?'on':''}"><span style="color:${D.cat===c.id?'#fff':c.color};display:grid">${ci(c,18)}</span>${esc(c.name)}</button>`).join('')}</div>`}
+function fchips(){const L=[],d=t=>new Date(t).toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+if(F.from||F.to)L.push(['date',(F.from?d(F.from):'…')+' – '+(F.to?d(F.to-864e5):'…')]);if(F.min)L.push(['min','≥ '+m(F.min)]);if(F.max)L.push(['max','≤ '+m(F.max)]);if(F.acc)L.push(['acc',(acc(F.acc)||{}).name||'Account']);if(F.tag)L.push(['tag','#'+F.tag]);
+return L.length?`<div class="chp" style="margin:1rem 0 0">${L.map(([k,t])=>`<button data-a="fx" data-k="${k}">${esc(t)} ×</button>`).join('')}</div>`:''}
+function mjump(){const ms=[...new Set(S.tx.map(t=>{const d=new Date(t.ts);return+new Date(d.getFullYear(),d.getMonth(),1)}))].sort((a,b)=>b-a);
+return`<select class="pill" id="mj" style="margin-top:1rem;max-width:100%"><option value="">All months</option>${ms.map(x=>`<option value="${x}"${F.from===x?' selected':''}>${new Date(x).toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</option>`).join('')}</select>`}
+let CE='';
+const cpre=t=>t.replace(/\*/g,'×').replace(/\//g,'÷').replace(/-/g,'−');
+function cres(){const t=CE.replace(/[+\-*/.]+$/,'');if(!t)return NaN;const n=ev(t);return isFinite(n)?n:NaN}
+function cshow(){const e=$('#cr'),r=$('#ce');if(!e)return;e.textContent=CE?cpre(CE):'0';const n=cres();r.textContent=/[+\-*/]/.test(CE.replace(/^-/,''))&&isFinite(n)?'= '+fmt(Math.abs(n))+(n<0?' (negative)':''):'\u00a0'}
+const calcUI=()=>`<div class="cx"><div class="mu" id="ce">&nbsp;</div><div id="cr">0</div></div><div class="kp">${[['C','C','fn'],['B','⌫','fn'],['/','÷','op'],['*','×','op'],['7'],['8'],['9'],['-','−','op'],['4'],['5'],['6'],['+','+','op'],['1'],['2'],['3'],['=','=','eq'],['0'],['.'],['use','Use amount','use wide']].map(([k,l,c])=>`<button class="k ${c||''}" data-a="ck" data-k="${k}">${l||k}</button>`).join('')}</div>`;
+function act(a,d,el){if(['ts','es','rs','ls','gs','td'].includes(a))vib(12);switch(a){
+case'nav':if(d.v!=='cats')R=null;V=d.v;q='';window.scrollTo(0,0);render();break;
+case'hide':S.hide=!S.hide;save();render();break;
+case'mode':am=d.v;ao=0;render();break;case'off':ao+=+d.d;render();break;case'at':at=d.v;render();break;case'ct':ct=d.v;render();break;
+case'add':openAdd();break;case'edit':openAdd(d.id);break;case'close':sheet();break;
+case'shut':if(el.classList.contains('ov'))sheet();break;
+case'tt':sync();D.type=d.v;if(d.v!=='transfer'&&cat(D.cat).type!==d.v)D.cat=oth(d.v);render();break;
+case'back':D=null;V=PV||'home';render();break;
+case'sort':so=-so;list();break;
+case'quick':if(!D)openAdd();sync();sheet(`<div class="sth"><b>Quick add</b><button class="ib" data-a="close" aria-label="Close">${I('x')}</button></div><p class="mu sm">Try “porotta 216 food” or “got 500 from amma”.</p><input id="qt" placeholder="Type a sentence"><div class="err" id="qe"></div><button class="btn" data-a="qgo">Fill the form</button>`);setTimeout(()=>$('#qt')&&$('#qt').focus(),60);break;
+case'qgo':{const s=$('#qt').value.trim(),n=s.match(/\d[\d,]*\.?\d*(?:k\b)?/i);if(!n){$('#qe').textContent='Include an amount, like “porotta 216”.';break}
+let w=s.replace(n[0],' ').toLowerCase();const v=parseFloat(n[0].replace(/,/g,''));D.amt=String(/k$/i.test(n[0])?v*1000:v);D.type=/\b(got|received|earned|salary|credited|income|sold)\b/.test(w)?'income':'expense';
+const A=[...S.acc].sort((x,y)=>y.name.length-x.name.length).find(x=>w.includes(x.name.toLowerCase()));if(A){D.acc=A.id;w=w.replace(A.name.toLowerCase(),' ')}
+const dn=['sun','mon','tue','wed','thu','fri','sat'],dm=w.match(/\b(yesterday|today|(?:last\s+)?(sun|mon|tues?|wed(?:nes)?|thu(?:rs?)?|fri|sat(?:ur)?)(?:day)?)\b/);
+if(dm){const d=new Date();if(dm[1]==='yesterday')d.setDate(d.getDate()-1);else if(dm[2]){const k=(d.getDay()-dn.indexOf(dm[2].slice(0,3))+7)%7;d.setDate(d.getDate()-(k||7))}D.ts=+d;w=w.replace(dm[0],' ')}
+const cs=S.cat.filter(c=>c.type===D.type);D.cat=(cs.find(c=>c.name.toLowerCase().split(/[^a-z]+/).some(x=>x.length>2&&w.includes(x)))||{id:oth(D.type)}).id;
+let t=w.replace(/\b(got|received|earned|from|for|on|spent|paid|credited|by|using|via)\b/g,' ').replace(/\s+/g,' ').trim();D.title=t?t[0].toUpperCase()+t.slice(1):'';sheet();render();break}
+case'calc':{sync();if(document.activeElement)document.activeElement.blur();CE=String(D.amt||'').replace(/,/g,'');if(!/^[\d+\-*/.]*$/.test(CE))CE='';sheet(calcUI());cshow();break}
+case'ck':{vib(10);const k=d.k,last=CE.slice(-1),isOp=c=>'+-*/'.includes(c);
+ if(k==='C')CE='';
+ else if(k==='B')CE=CE.slice(0,-1);
+ else if('+-*/'.includes(k)){if(CE===''){if(k==='-')CE='-'}else if(CE==='-'){}else if(isOp(last))CE=CE.slice(0,-1)+k;else CE+=k}
+ else if(k==='.'){const cur=CE.split(/[+\-*/]/).pop();if(!cur.includes('.'))CE+=(cur===''?'0.':'.')}
+ else if(k==='='){const n=cres();if(isFinite(n))CE=String(+n.toFixed(2));else toast('Check the calculation')}
+ else if(k==='use'){const n=cres();if(!isFinite(n)||n<=0){toast('Enter an amount above 0');break}D.amt=String(+n.toFixed(2));sheet();const a=$('#amt');if(a)a.value=D.amt;break}
+ else CE+=k;
+ cshow();break}
+case'pcat':pickCat();break;case'pacc':PT='acc';pickAcc();break;case'pto':PT='to';pickAcc();break;
+case'chip':sync();D.cat=d.v;render();break;case'sc':D.cat=d.v;sheet();render();break;case'sa':D[PT]=d.v;sheet();render();break;case'pv':pv=d.v;pickCat();break;
+case'gocat':sheet();R='add';ct=D.type==='income'?'income':'expense';V='cats';render();break;
+case'goacc':sheet();R='add';V='accounts';render();break;
+case'hide2':S.hide=!S.hide;save();pickAcc();break;
+case'tag':sync();D.tags=D.tags.includes(d.v)?D.tags.filter(x=>x!==d.v):[...D.tags,d.v];render();break;
+case'thelp':sheet(`<div class="sth"><b>About tags</b><button class="ib" data-a="close" aria-label="Close">${I('x')}</button></div><p class="mu">Tags group transactions across categories, like #vacation or #amazon. Type a tag and press Enter, or tap a suggestion.</p>`);break;
+case'att':$('#fl').click();break;case'rmimg':D.img=null;render();break;
+case'ts':{sync();D.er='';const n=ev(D.amt);if(!(n>0)){D.er='Enter an amount greater than 0.';return render()}if(D.type==='transfer'&&D.acc===D.to){D.er='Pick two different accounts.';return render()}
+const t={id:D.id||uid(),type:D.type,amt:+n.toFixed(2),title:D.title.trim(),cat:D.type==='transfer'?null:D.cat,acc:D.acc,to:D.type==='transfer'?D.to:null,ts:D.ts||Date.now(),tags:D.tags,img:D.img?'idb':null};if(D.img){IMG[t.id]=D.img;iput(t.id,D.img)}else{delete IMG[t.id];idel(t.id)}setTimeout(()=>budgetCheck(t),400);
+const i=S.tx.findIndex(x=>x.id===t.id);i>=0?S.tx[i]=t:S.tx.push(t);save();D=null;V=PV||'home';render();break}
+case'td':delTx(D.id);D=null;V=PV||'home';render();break;
+case'pi':E.v=d.v;document.querySelectorAll('.ipk button').forEach(b=>b.firstChild.classList.toggle('sel',b.dataset.v===d.v));break;
+case'eacc':entSheet('acc',d.id);break;case'ecat':entSheet('cat',d.id);break;
+case'es':{const nm=$('#en').value.trim(),v=$('#ev')?$('#ev').value.trim():'';if(!nm)return entSheet(E.k,E.id,'Give it a name.');
+if(E.k==='acc'){const o=acc(E.id)||{id:uid()};Object.assign(o,{name:nm,type:$('#et').value,open:parseFloat(v)||0,stmt:Math.min(28,+$('#es2').value||0),due:Math.min(28,+$('#ed2').value||0)});if(!E.id)S.acc.push(o)}
+else{const o=cat(E.id).id?cat(E.id):{id:uid(),type:ct,color:PAL[S.cat.length%12]};Object.assign(o,{name:nm,icon:E.v||'star'});if(COL[E.v])o.color=COL[E.v];{const bv=$('#eb')?parseFloat($('#eb').value):0;if(bv>0)S.bud[o.id]=bv;else delete S.bud[o.id]}if(!E.id)S.cat.push(o)}
+save();sheet();render();break}
+case'ed':{if(E.k==='acc'){if(S.tx.some(t=>t.acc===E.id||t.to===E.id))return entSheet('acc',E.id,'This account has transactions. Delete or edit them first.');if(S.acc.length<2)return entSheet('acc',E.id,'Keep at least one account.');S.acc=S.acc.filter(x=>x.id!==E.id)}
+else{if(S.tx.some(t=>t.cat===E.id))return reasg(E.id);S.cat=S.cat.filter(x=>x.id!==E.id)}save();sheet();render();break}
+case'backup':sheet(`${head('Backup &amp; restore')}<p class="mu sm">Download a file (includes attachments) or copy this text to keep a backup. To restore, replace it with a saved backup and tap Restore.</p><textarea id="bk">${esc(JSON.stringify(S))}</textarea><div class="err" id="be"></div><button class="btn" data-a="bkdl">Download backup file</button><button class="btn" data-a="bkup">Import backup file</button><button class="btn" data-a="copy">Copy backup text</button><button class="btn del" data-a="restore">Restore from text</button>`);break;
+case'copy':$('#bk').select();try{navigator.clipboard.writeText($('#bk').value)}catch(e){}$('#be').textContent='Copied (or selected, so you can copy it manually).';break;
+case'restore':try{const x=JSON.parse($('#bk').value);if(!x.tx||!x.acc||!x.cat)throw 0;S=x;norm();save();sheet();render()}catch(e){$('#be').textContent='That text is not a valid backup.'}break;
+case'reset':sheet(`${head('Erase everything?')}<p class="mu">All accounts, categories and transactions on this device will be deleted.</p><button class="btn del" data-a="wipe">Erase all data</button>`);break;
+case'wipe':S=fresh();norm();save();sheet();V='home';render();break;
+case'xlsx':exportXlsx();break;
+case'bkdl':S.lastBk=Date.now();save();saveXlsx('Penny-backup-'+new Date().toISOString().slice(0,10)+'.json',btoa(unescape(encodeURIComponent(JSON.stringify({S,img:IMG})))),'application/json');break;
+case'bkup':$('#bf').click();break;case'xlin':$('#xf').click();break;
+case'rg':S.tx.forEach(t=>{if(t.cat===d.id)t.cat=$('#rt').value});S.cat=S.cat.filter(x=>x.id!==d.id);delete S.bud[d.id];save();sheet();render();break;
+case'pay':{const a=acc(d.id),u=Math.max(0,a.open-bal(a)),f=S.acc.find(x=>x.type!=='credit');sheet();openAdd();D.type='transfer';D.cat=null;D.to=a.id;if(f)D.acc=f.id;D.amt=u?String(+u.toFixed(2)):'';render();break}
+case'erec':erec(d.id);break;
+case'rs':{const am=ev($('#ra').value),c=cat($('#rc').value);if(!(am>0)){$('#re').textContent='Enter an amount greater than 0.';break}const o=S.rec.find(x=>x.id===d.id)||{id:uid()};Object.assign(o,{type:c.type,amt:+am.toFixed(2),title:$('#rn').value.trim(),cat:$('#rc').value,acc:$('#rac').value,freq:$('#rf').value,next:+new Date($('#rd').value+'T09:00')||Date.now()});if(!d.id)S.rec.push(o);runRec();save();sheet();render();break}
+case'rdl':S.rec=S.rec.filter(x=>x.id!==d.id);save();sheet();render();break;
+case'eloan':eloan(d.id);break;
+case'ls':{const am=ev($('#la').value),w=$('#lw').value.trim();if(!(am>0)||!w){$('#le').textContent='Enter a name and an amount.';break}const o=S.loans.find(x=>x.id===d.id)||{id:uid(),paid:false,ts:Date.now()};Object.assign(o,{who:w,amt:+am.toFixed(2),dir:$('#ld').value,note:$('#ln').value.trim(),due:$('#lde').value?+new Date($('#lde').value+'T09:00'):0});if(!d.id)S.loans.push(o);save();sheet();render();break}
+case'lrc':{const x=S.loans.find(l=>l.id===d.id),b=x.dir==='borrowed',ty=b?'expense':'income',nm=x.dir==='lent'?'Loan Payback':b?'Loan':'',c=S.cat.find(k=>k.type===ty&&k.name===nm)||{id:oth(ty)};S.tx.push({id:uid(),type:ty,amt:x.amt,title:x.who+(x.note?' · '+x.note:''),cat:c.id,acc:$('#lac').value,to:null,ts:Date.now(),tags:['loan'],img:null});x.paid=true;save();sheet();render();toast('Added to your transactions');break}
+case'lp':{const o=S.loans.find(x=>x.id===d.id);o.paid=!o.paid;save();sheet();render();break}
+case'lx':S.loans=S.loans.filter(x=>x.id!==d.id);save();sheet();render();break;
+case'egoal':egoal(d.id);break;
+case'gs':{const t=ev($('#gt').value),n=$('#gn').value.trim();if(!(t>0)||!n){$('#ge').textContent='Enter a name and a target.';break}const o=S.goals.find(x=>x.id===d.id)||{id:uid()};Object.assign(o,{name:n,target:t,saved:Math.max(0,ev($('#gv').value)||0)});if(!d.id)S.goals.push(o);save();sheet();render();break}
+case'gx':S.goals=S.goals.filter(x=>x.id!==d.id);save();sheet();render();break;
+case'drill':q=d.q;tf=d.t||'all';F=d.f?{from:+d.f,to:+d.e}:{};V='tx';window.scrollTo(0,0);render();break;
+case'fsheet':fsheet();break;
+case'fgo':{const g=i=>$(i).value,dt=(i,x=0)=>g(i)?+new Date(g(i)+'T00:00')+x:0,o={from:dt('#ff'),to:dt('#ft',864e5),min:parseFloat(g('#fa'))||0,max:parseFloat(g('#fb'))||0,acc:g('#fc'),tag:g('#fg').trim().replace(/^#/,'')};F={};for(const k in o)if(o[k])F[k]=o[k];sheet();render();break}
+case'fx':if(d.k==='date'){delete F.from;delete F.to}else delete F[d.k];render();break;case'bar':toast(d.t);break;case'ntg':ntToggle();break;case'abg':S.ab.on=S.ab.on?0:1;if(S.ab.on)S.lastBk=0;save();render();autoBackup();break;
+case'yp':Y--;render();break;case'yn':Y++;render();break;
+case'tpl':{sync();const x=S.tpl.find(z=>z.id===d.id);D.amt=String(x.amt);D.cat=x.cat;D.acc=x.acc;D.title=x.title||'';render();break}
+case'tsv':{sync();const am=ev(D.amt);if(!(am>0)||!D.cat){toast('Enter an amount and a category first');break}S.tpl.push({id:uid(),name:D.title||cat(D.cat).name,type:D.type,amt:am,cat:D.cat,acc:D.acc,title:D.title||''});save();render();toast('Template saved');break}
+case'tdel':{const x=S.tpl.find(z=>z.id===d.id);S.tpl=S.tpl.filter(z=>z.id!==d.id);save();render();toast('Template deleted',()=>{S.tpl.push(x);save();render()});break}
+case'csv':{const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"',rows=[['Date','Time','Type','Category','Account','To account','Amount','Note','Tags'],...[...S.tx].sort((a,b)=>a.ts-b.ts).map(t=>{const[dt,tm]=loc(t.ts).split('T');return[dt,tm,t.type,t.cat?cat(t.cat).name:'',(acc(t.acc)||{}).name||'',t.to?(acc(t.to)||{}).name:'',t.amt,t.title||'',(t.tags||[]).join(', ')]})];saveXlsx('Penny-transactions-'+new Date().toISOString().slice(0,10)+'.csv',btoa(unescape(encodeURIComponent('\ufeff'+rows.map(r=>r.map(q).join(',')).join('\n')))),'text/csv');break}
+case'ntd':S.nt.daily=S.nt.daily?0:1;save();render();break;case'fclr':F={};sheet();render();break}}
+document.addEventListener('click',e=>{if(window.__sw)return;const el=e.target.closest('[data-a]');if(!el||(el.dataset.a==='shut'&&e.target!==el))return;act(el.dataset.a,el.dataset,el)});
+document.addEventListener('input',e=>{if(e.target.id==='q'){q=e.target.value;list()}if(e.target.id==='nm'){S.name=e.target.value;save()}});
+document.addEventListener('change',e=>{const c=e.target.dataset.ch;if(c==='hp'){hp=e.target.value;render()}if(c==='tf'){tf=e.target.value;list()}const i=e.target.id;if(i==='mj'){const v=+e.target.value;delete F.from;delete F.to;if(v){F.from=v;const d=new Date(v);F.to=+new Date(d.getFullYear(),d.getMonth()+1,1)}render()}if(i==='cu'){S.cur=e.target.value;save();render()}if(i==='bf'&&e.target.files[0]){importBk(e.target.files[0]);e.target.value=''}if(i==='xf'&&e.target.files[0]){importXl(e.target.files[0]);e.target.value=''}if(D&&V==='add'&&(i==='dd'||i==='dt')){sync();render()}if(i==='fl'&&e.target.files[0]){sync();pickImg(e.target.files[0])}});
+document.addEventListener('keydown',e=>{if(e.target.id==='tg'&&(e.key==='Enter'||e.key===',')){e.preventDefault();sync();render();$('#tg')&&$('#tg').focus()}});
+/* ===== Excel export ===== */
+function toast(t,u){const o=document.querySelector('.toast');if(o)o.remove();const e=document.createElement('div');e.className='toast';e.textContent=t;if(u){const b=document.createElement('button');b.textContent='Undo';b.style.cssText='margin-left:1.2rem;font-weight:700;text-decoration:underline';b.onclick=()=>{u();e.remove()};e.appendChild(b)}document.body.appendChild(e);setTimeout(()=>{e.classList.add('out');setTimeout(()=>e.remove(),260)},u?5e3:3200)}
+const xser=ts=>{const d=new Date(ts);return Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes(),d.getSeconds())/864e5+25569};
+function buildWorkbook(){
+ const X=XLSX,wb=X.utils.book_new(),DT='dd-mmm-yyyy hh:mm',NM='#,##0.00;[Red]-#,##0.00';
+ const cn=id=>id?cat(id).name:'',an=id=>(acc(id)||{}).name||'',TY={bank:'Bank',cash:'Cash',credit:'Credit'};
+ const used=new Set();
+ const sname=n=>{let b=String(n).replace(/[\\\/?*\[\]:]/g,' ').trim().slice(0,31)||'Sheet',r=b,i=2;while(used.has(r.toLowerCase())){const x=' ('+i++ +')';r=b.slice(0,31-x.length)+x}used.add(r.toLowerCase());return r};
+ const sheetOf=(head,rows,widths,fmt)=>{const ws=X.utils.aoa_to_sheet([head,...rows]);ws['!cols']=widths.map(w=>({wch:w}));
+  const r=X.utils.decode_range(ws['!ref']);for(let R=1;R<=r.e.r;R++)for(const[C,z]of Object.entries(fmt)){const c=ws[X.utils.encode_cell({r:R,c:+C})];if(c&&c.t==='n')c.z=z}
+  ws['!autofilter']={ref:ws['!ref']};return ws};
+ const all=[...S.tx].sort((a,b)=>a.ts-b.ts);
+ /* Accounts overview */
+ const rows=S.acc.map(a=>{const l=all.filter(t=>t.acc===a.id||t.to===a.id);
+  let inn=0,out=0;l.forEach(t=>{if(t.type==='transfer'){if(t.to===a.id)inn+=t.amt;if(t.acc===a.id)out+=t.amt}else if(t.acc===a.id){t.type==='income'?inn+=t.amt:out+=t.amt}});
+  return[a.name,TY[a.type]||a.type,+a.open||0,+inn.toFixed(2),+out.toFixed(2),+bal(a).toFixed(2),l.length]});
+ const sa=a=>S.acc.filter(a2=>a2.type!=='credit'===a).map(bal).reduce((s,v)=>s+v,0);
+ const n=rows.length+1;
+ const ws1=sheetOf(['Account','Type','Opening balance / Credit limit','Total in','Total out','Current balance / Available credit','Transactions'],rows,[26,10,30,16,16,34,14],{2:NM,3:NM,4:NM,5:NM});
+ delete ws1['!autofilter'];
+ X.utils.sheet_add_aoa(ws1,[[],['Available balance (bank + cash)','','','','',+sa(true).toFixed(2)],['Available credit','','','','',+sa(false).toFixed(2)]],{origin:n});
+ [n+1,n+2].forEach(R=>{const c=ws1[X.utils.encode_cell({r:R,c:5})];if(c)c.z=NM});
+ X.utils.book_append_sheet(wb,ws1,sname('Accounts'));
+ /* All transactions */
+ const tr=all.map(t=>[{t:'n',v:xser(t.ts),z:DT},cap(t.type),t.type==='transfer'?'':cn(t.cat),an(t.acc),t.type==='transfer'?an(t.to):'',+(+t.amt).toFixed(2),t.title||'',(t.tags||[]).join(', ')]);
+ X.utils.book_append_sheet(wb,sheetOf(['Date & time','Type','Category','Account','To account','Amount','Note','Tags'],tr,[18,11,22,22,22,14,34,22],{5:NM}),sname('Transactions'));
+ /* One ledger per account, with running balance */
+ S.acc.forEach(a=>{let b=+a.open||0;const lr=[['','Opening balance','','','',b,'']];
+  all.forEach(t=>{let i=0,o=0,what='';
+   if(t.type==='transfer'){if(t.acc===a.id){o=t.amt;what='Transfer to '+an(t.to)}if(t.to===a.id){i=t.amt;what='Transfer from '+an(t.acc)}if(!o&&!i)return}
+   else if(t.acc===a.id){t.type==='income'?i=t.amt:o=t.amt;what=cn(t.cat)}else return;
+   b+=i-o;lr.push([{t:'n',v:xser(t.ts),z:DT},what,t.title||'',i?+i.toFixed(2):'',o?+o.toFixed(2):'',+b.toFixed(2),(t.tags||[]).join(', ')])});
+  X.utils.book_append_sheet(wb,sheetOf(['Date & time','Category / Transfer','Note','Money in','Money out','Balance','Tags'],lr,[18,26,34,14,14,16,22],{3:NM,4:NM,5:NM}),sname(a.name))});
+ return wb}
+async function saveXlsx(name,b64,mime){
+ const C=window.Capacitor;
+ if(C&&C.isNativePlatform&&C.isNativePlatform()){
+  const{Filesystem,Share}=C.Plugins;
+  const r=await Filesystem.writeFile({path:name,data:b64,directory:'CACHE'});
+  try{await Share.share({title:name,dialogTitle:'Save or send your Excel file',url:r.uri})}catch(e){if(!/cancel/i.test(String(e&&e.message||e)))throw e}
+  return}
+ const bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([u],{type:mime||'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4e3);toast('File downloaded')}
+async function exportXlsx(){
+ try{await loadXl();if(!window.XLSX)throw new Error('Excel library did not load');
+  const d=new Date(),p=n=>String(n).padStart(2,'0'),name=`Penny-accounts-${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}.xlsx`;
+  await saveXlsx(name,XLSX.write(buildWorkbook(),{bookType:'xlsx',type:'base64'}))}
+ catch(e){sheet(`${head('Export failed')}<p class="mu">Could not create the Excel file.</p><p class="err">${esc(e&&e.message||e)}</p>`)}}
+
+/* ===== Android: hardware back button ===== */
+(function(){const C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return;
+ const A=C.Plugins&&C.Plugins.App;if(!A)return;
+ A.addListener('backButton',()=>{
+  if($('#ov .ov:not(.out)')){sheet();return}
+  if(V==='add'){act('back',{});return}
+  if(MV.includes(V)){act('nav',{v:V==='cats'?(R||'more'):'more'},null);return}
+  if(V!=='home'){act('nav',{v:V==='tx'?'home':'home'},null);return}
+  A.exitApp()})})();
+
+runRec();schedNotif();document.addEventListener('visibilitychange',()=>{if(!document.hidden){runRec();if(!D&&!$('#ov').innerHTML)render()}});
+(async()=>{const o=await iall();if(!DB)return;Object.assign(IMG,o||{});let ch=0;for(const t of S.tx)if(t.img&&t.img!=='idb'){IMG[t.id]=t.img;await iput(t.id,t.img);t.img='idb';ch=1}if(ch)save();if((ch||(o&&Object.keys(o).length))&&!D&&!$('#ov').innerHTML)render();autoBackup()})();
+setTimeout(()=>loadXl().catch(()=>{}),2500);
+render();
+</script></body></html>

@@ -1,0 +1,16 @@
+{
+  "appId": "com.penny.moneymanager",
+  "appName": "Penny",
+  "webDir": "www",
+  "backgroundColor": "#131619",
+  "android": {
+    "backgroundColor": "#131619"
+  },
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "css",
+      "initialViewportFitValueHint": "cover",
+      "style": "DEFAULT"
+    }
+  }
+}
